@@ -18,6 +18,8 @@ public class Menu : MonoBehaviour {
 	private GameObject sOut;
 	// Use this for initialization
 	void Start () {
+		Screen.orientation = ScreenOrientation.Landscape;
+
 		GooglePlayGames.PlayGamesPlatform.Activate();
 
 
