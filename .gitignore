@@ -27,3 +27,10 @@ Library/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# ====================== #
+# Escape Project Version #
+# ====================== #
+ProjectSettings/GraphicsSettings.asset
+ProjectSettings/ProjectSettings.asset
+ProjectSettings/ProjectVersion.txt
