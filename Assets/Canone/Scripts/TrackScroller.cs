@@ -6,7 +6,7 @@ public class TrackScroller : MonoBehaviour {
 		if (other.gameObject.CompareTag ("Player")) {
 			transform.position = new Vector3 (transform.position.x, 
 				transform.position.y, 
-				transform.position.z+ 27.7f * 4 );
+				transform.position.z+ 30f * 4 );
 		}
 
 	}
