@@ -6,7 +6,11 @@ public class TrackRotater : MonoBehaviour {
 
 	void FixedUpdate () {
 		if (!PlayerMover.gameEnd){
-			transform.Rotate (new Vector3(0,0,-1) * Input.GetAxis ("Horizontal") * rotateSpeed);
+			if ((GameObject.Find ("Track").transform.rotation.z > -0.65f && GameObject.Find ("Track").transform.rotation.z < 0.65f)
+				||(GameObject.Find ("Track").transform.rotation.z <= -0.65f && Input.GetAxis ("Horizontal") < 0)
+				||(GameObject.Find ("Track").transform.rotation.z >= 0.65f && Input.GetAxis ("Horizontal") > 0)) {
+				transform.Rotate (new Vector3(0,0,-1) * Input.GetAxis ("Horizontal") * rotateSpeed);
+			}
 		}
 	}
 }
