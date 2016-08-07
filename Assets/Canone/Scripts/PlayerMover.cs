@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
 using GooglePlayGames;
@@ -17,6 +18,7 @@ public class PlayerMover : MonoBehaviour {
 	private float nextFire;
 	private float bulletCoolDown = 3;
 
+	List<GameObject> bullets = new List<GameObject>();
 	
 
 	void Start(){
@@ -33,15 +35,28 @@ public class PlayerMover : MonoBehaviour {
 			tileIndexToMove += 1;
 		}
 //		Debug.Log (this.transform.position.z);
-//		if (!gameEnd){transform.Translate (Vector3.forward * playerMovingSpeed);}	
+		if (!gameEnd){
+			transform.Translate (Vector3.forward * playerMovingSpeed);
+			if (Input.GetButton ("Fire1") && Time.time > nextFire) {
+				nextFire = Time.time + fireRate;
+				GameObject b = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
+				b.transform.parent = GameObject.Find ("Track").transform;
+
+				bullets.Add (b);
+			}
+
+		}
+		foreach (GameObject b in bullets){
+			if (b.transform.position.z - this.transform.position.z > 15) {
+				bullets.Remove (b);
+				Destroy (b);
+			}
+		}
+
 	}
 
 	void Update(){
-		if (Input.GetButton ("Fire1") && Time.time > nextFire) {
-			nextFire = Time.time + fireRate;
-			GameObject b = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
-			b.transform.parent = GameObject.Find ("Track").transform;
-		}
+
 	}
 			
 
