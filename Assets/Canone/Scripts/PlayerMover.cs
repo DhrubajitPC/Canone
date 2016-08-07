@@ -2,54 +2,26 @@
 using System.Collections;
 
 public class PlayerMover : MonoBehaviour {
-	private GameObject track;
-	private GameObject space;
+	private GameObject[] trackSegments;
 //	private int numOfLife = 3;
-	private float timer;
-	private string currentEnvironment = "Track";
+	private float playerMovingSpeed = 0.1f;
+	private int tileIndexToMove = 0;
 
 	void Start(){
-		track = GameObject.FindWithTag ("Track");
-		space = GameObject.FindWithTag ("Space");
-		loadTrack ();
-		timer = 30;
-	}
-
-	void Update(){
-		Debug.Log (currentEnvironment);
-		timer -= Time.deltaTime;
-		if (timer <= 0) {
-			timer = 30;
-			if (currentEnvironment == "Space")
-				loadTrack ();
-			else
-				loadSpace ();
-		}
+		trackSegments = new GameObject[] {
+			GameObject.Find ("TrackSegment1"),
+			GameObject.Find ("TrackSegment2"),
+			GameObject.Find ("TrackSegment3"),
+			GameObject.Find ("TrackSegment4")};
+		
 	}
 		
 	void FixedUpdate () {
-		transform.Translate (Vector3.forward * 0.1f);
-	}
-
-	void loadTrack(){
-		GetComponent<Rigidbody> ().useGravity = true;
-		currentEnvironment = "Track";
-		transform.position = new Vector3 (transform.position.x, 1.0f, transform.position.z);
-		GameObject[] trackSegments = GameObject.FindGameObjectsWithTag ("TrackSegment");
-		float z = 0;
-		foreach (GameObject trackSegment in trackSegments){
-			trackSegment.transform.position = new Vector3 (trackSegment.transform.position.x, trackSegment.transform.position.y, z);
-			z += 30;
+		if (this.transform.position.z > 30 * (tileIndexToMove + 1)) {
+			trackSegments [tileIndexToMove % 4].transform.Translate (0, 30*4, 0);
+			tileIndexToMove += 1;
 		}
-		track.transform.position = new Vector3 (transform.position.x, this.transform.position.y + 11.0f, transform.position.z);
-		space.transform.position = new Vector3 (transform.position.x, -200f, transform.position.z);
-
+		Debug.Log (this.transform.position.z);
+		transform.Translate (Vector3.forward * playerMovingSpeed);
 	}
-	void loadSpace(){
-		currentEnvironment = "Space";
-		space.transform.position = new Vector3 (transform.position.x, transform.position.y + 11.0f, transform.position.z);
-		track.transform.position = new Vector3 (transform.position.x, -200f, transform.position.z);
-		GetComponent<Rigidbody> ().useGravity = false;
-	}
-
 }
