@@ -10,6 +10,15 @@ public class PlayerMover : MonoBehaviour {
 	private int tileIndexToMove = 0;
 	public static bool gameEnd = false;
 
+	public GameObject bullet;
+	public Transform bulletSpawn;
+	public float fireRate;
+
+	private float nextFire;
+	private float bulletCoolDown = 3;
+
+	
+
 	void Start(){
 		trackSegments = new GameObject[] {
 			GameObject.Find ("TrackSegment1"),
@@ -24,8 +33,17 @@ public class PlayerMover : MonoBehaviour {
 			tileIndexToMove += 1;
 		}
 //		Debug.Log (this.transform.position.z);
-		if (!gameEnd){transform.Translate (Vector3.forward * playerMovingSpeed);}
+//		if (!gameEnd){transform.Translate (Vector3.forward * playerMovingSpeed);}	
 	}
+
+	void Update(){
+		if (Input.GetButton ("Fire1") && Time.time > nextFire) {
+			nextFire = Time.time + fireRate;
+			GameObject b = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
+			b.transform.parent = GameObject.Find ("Track").transform;
+		}
+	}
+			
 
 	void OnCollisionEnter (Collision other)
 	{
