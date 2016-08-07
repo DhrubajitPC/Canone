@@ -3,9 +3,9 @@ using System.Collections;
 
 public class PlayerMover : MonoBehaviour {
 	private GameObject[] trackSegments;
-//	private int numOfLife = 3;
 	private float playerMovingSpeed = 0.1f;
 	private int tileIndexToMove = 0;
+	private bool gameEnd = false;
 
 	void Start(){
 		trackSegments = new GameObject[] {
@@ -13,7 +13,6 @@ public class PlayerMover : MonoBehaviour {
 			GameObject.Find ("TrackSegment2"),
 			GameObject.Find ("TrackSegment3"),
 			GameObject.Find ("TrackSegment4")};
-		
 	}
 		
 	void FixedUpdate () {
@@ -21,7 +20,17 @@ public class PlayerMover : MonoBehaviour {
 			trackSegments [tileIndexToMove % 4].transform.Translate (0, 30*4, 0);
 			tileIndexToMove += 1;
 		}
-		Debug.Log (this.transform.position.z);
-		transform.Translate (Vector3.forward * playerMovingSpeed);
+//		Debug.Log (this.transform.position.z);
+		if (!gameEnd){transform.Translate (Vector3.forward * playerMovingSpeed);}
 	}
+
+	void OnCollisionEnter (Collision other)
+	{
+		string collidedItem = other.gameObject.name;
+		if(collidedItem.Contains("FleshCube") || collidedItem.Contains("turret") || collidedItem.Contains("prism"))
+		{
+			gameEnd = true;
+		}
+	} 
+
 }
