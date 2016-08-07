@@ -4,8 +4,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.SocialPlatforms;
 
-
-
 public class Menu : MonoBehaviour {
 
 	public Text text;
