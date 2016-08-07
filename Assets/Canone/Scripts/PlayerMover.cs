@@ -8,7 +8,7 @@ public class PlayerMover : MonoBehaviour {
 	private GameObject[] trackSegments;
 	private float playerMovingSpeed = 0.1f;
 	private int tileIndexToMove = 0;
-	private bool gameEnd = false;
+	public static bool gameEnd = false;
 
 	void Start(){
 		trackSegments = new GameObject[] {
@@ -33,13 +33,11 @@ public class PlayerMover : MonoBehaviour {
 		if(collidedItem.Contains("FleshCube") || collidedItem.Contains("turret") || collidedItem.Contains("prism"))
 		{
 			gameEnd = true;
-			Social.ReportScore (12345, Social.localUser.id ,(bool success)=>{
-				Social.ShowLeaderboardUI();
-			});
+//			Social.ReportScore (12345, Social.localUser.id ,(bool success)=>{
+//				Social.ShowLeaderboardUI();
+//			});
 		}
 	}
 
-	void restartGame(){
-		
-	}
+
 }
