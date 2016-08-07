@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms;
+using GooglePlayGames;
 
 public class PlayerMover : MonoBehaviour {
 	private GameObject[] trackSegments;
@@ -30,7 +33,13 @@ public class PlayerMover : MonoBehaviour {
 		if(collidedItem.Contains("FleshCube") || collidedItem.Contains("turret") || collidedItem.Contains("prism"))
 		{
 			gameEnd = true;
+			Social.ReportScore (12345, Social.localUser.id ,(bool success)=>{
+				Social.ShowLeaderboardUI();
+			});
 		}
-	} 
+	}
 
+	void restartGame(){
+		
+	}
 }
