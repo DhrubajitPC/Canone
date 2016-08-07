@@ -16,7 +16,9 @@ public class PlayerMover : MonoBehaviour {
 	public float fireRate;
 
 	private float nextFire;
-	private float bulletCoolDown = 3;
+
+	private int bulletsLeft = 3;
+	private float bulletCountDownTimer = 3;
 
 	List<GameObject> bullets = new List<GameObject>();
 	
@@ -28,37 +30,40 @@ public class PlayerMover : MonoBehaviour {
 			GameObject.Find ("TrackSegment3"),
 			GameObject.Find ("TrackSegment4")};
 	}
-		
+
 	void FixedUpdate () {
 		if (this.transform.position.z > 30 * (tileIndexToMove + 1)) {
 			trackSegments [tileIndexToMove % 4].transform.Translate (0, 30*4, 0);
 			tileIndexToMove += 1;
 		}
-//		Debug.Log (this.transform.position.z);
 		if (!gameEnd){
 			transform.Translate (Vector3.forward * playerMovingSpeed);
-			if (Input.GetButton ("Fire1") && Time.time > nextFire) {
+			if (Input.GetButton ("Fire1") && Time.time > nextFire && bulletsLeft > 0) {
+				bulletsLeft -= 1;
 				nextFire = Time.time + fireRate;
 				GameObject b = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
 				b.transform.parent = GameObject.Find ("Track").transform;
-
+	
 				bullets.Add (b);
 			}
-
-		}
-		foreach (GameObject b in bullets){
-			if (b.transform.position.z - this.transform.position.z > 15) {
-				bullets.Remove (b);
-				Destroy (b);
+			if (bulletsLeft == 0) {
+				bulletCountDownTimer -= Time.deltaTime;
 			}
-		}
+			if (bulletCountDownTimer < 0) {
+				bulletsLeft = 3;
+				bulletCountDownTimer = 3;
+			}
 
+			if (bullets.Count > 0) {
+				foreach (GameObject b in bullets) {
+					if (b.transform.position.z - this.transform.position.z > 15) {
+						bullets.Remove (b);
+						Destroy (b);
+					}
+				}
+			}
+		}	
 	}
-
-	void Update(){
-
-	}
-			
 
 	void OnCollisionEnter (Collision other)
 	{
