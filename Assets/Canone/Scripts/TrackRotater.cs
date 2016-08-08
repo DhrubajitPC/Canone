@@ -48,7 +48,7 @@ public class TrackRotater : MonoBehaviour {
 
 			if (Input.GetKeyDown ("space")) {
 				initRot = initRot >0? -4.0f: 176f;
-//				GameObject.Find ("Player").transform.Translate (new Vector3(0, 0.3f ,0));
+				GameObject.Find ("Player").transform.Translate (new Vector3(0, 0.3f ,0));
 				transform.Rotate (new Vector3 (0, 0, 180f));
 			}
 		}
