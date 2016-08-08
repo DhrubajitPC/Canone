@@ -22,44 +22,35 @@ public class TrackRotater : MonoBehaviour {
 
     void FixedUpdate () {
         if (!PlayerMover.gameEnd){
-            GameObject track = GameObject.Find("Track");
 #if UNITY_EDITOR
             float tilt = Input.GetAxis("Horizontal");
 #else
             float tilt = Input.acceleration.x;
 #endif
-            float tiltfactor = tilt;
-            if (tilt > maxRotateSpeed) { tiltfactor = maxRotateSpeed; };
-            if (tilt < -maxRotateSpeed) { tiltfactor = -maxRotateSpeed; };
+			tilt = Mathf.Clamp (tilt, -maxRotateSpeed, maxRotateSpeed);
+			Quaternion currentRotation = transform.rotation;
+			Quaternion userRotation = Quaternion.Euler (0, 0, -tilt);
+			float rotation = relativeRotation ((currentRotation * userRotation).eulerAngles.z, initRot);
+			if (Mathf.Abs (tilt) > minRotateSpeed && Mathf.Abs (rotation) <= maxRot) 
+			{
+				transform.Rotate (new Vector3 (0, 0, -1) * tilt);
+			}
 
-            float z_rot = relativeRotation(track.transform.rotation.eulerAngles.z, initRot);
-            if (Mathf.Abs(tiltfactor) > minRotateSpeed)
-            {
-                Quaternion test = track.transform.rotation;
-                test *= Quaternion.Euler(0, 0, -tiltfactor);
-                float test_z_rot = relativeRotation(test.eulerAngles.z, initRot);
-                if (test_z_rot > maxRot || test_z_rot < -maxRot)
-                {
-                    //do nothing
-                } else
-                {
-                    transform.Rotate(new Vector3(0, 0, -1) * tiltfactor);
-                }
-            }
+			float z_rot = relativeRotation (currentRotation.eulerAngles.z, initRot);
+			//sanity check
+			if (z_rot > maxRot)
+			{
+				transform.rotation = Quaternion.Euler(new Vector3(0, 0, initRot + maxRot));
+			}
+			else if (z_rot < -maxRot) {
+				transform.rotation = Quaternion.Euler(new Vector3(0, 0, initRot - maxRot));
+			}
 
-            //sanity check
-            if (z_rot > maxRot)
-            {
-                transform.rotation = Quaternion.Euler(new Vector3(0, 0, initRot + maxRot));
-            }
-            else if (z_rot < -maxRot) {
-                transform.rotation = Quaternion.Euler(new Vector3(0, 0, initRot - maxRot));
-            }
-			/*if ((GameObject.Find ("Track").transform.rotation.z > -0.65f && GameObject.Find ("Track").transform.rotation.z < 0.65f)
-				||(GameObject.Find ("Track").transform.rotation.z <= -0.65f && Input.GetAxis ("Horizontal") < 0)
-				||(GameObject.Find ("Track").transform.rotation.z >= 0.65f && Input.GetAxis ("Horizontal") > 0)) {
-				transform.Rotate (new Vector3(0,0,-1) * Input.GetAxis ("Horizontal") * rotateSpeed);
-			}*/
+			if (Input.GetKeyDown ("space")) {
+				initRot = initRot >0? -4.0f: 176f;
+				transform.Rotate (new Vector3 (0, 0, 180f));
+			}
 		}
 	}
+
 }

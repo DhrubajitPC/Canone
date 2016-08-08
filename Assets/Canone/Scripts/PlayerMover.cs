@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
 using GooglePlayGames;
+using UnityEngine.UI;
 
 public class PlayerMover : MonoBehaviour {
 	private GameObject[] trackSegments;
@@ -24,6 +25,8 @@ public class PlayerMover : MonoBehaviour {
 	
 
 	void Start(){
+		gameEnd = false;
+		GameObject.Find("Canvas").GetComponent<Canvas> ().enabled = false;
 		trackSegments = new GameObject[] {
 			GameObject.Find ("TrackSegment1"),
 			GameObject.Find ("TrackSegment2"),
@@ -71,11 +74,11 @@ public class PlayerMover : MonoBehaviour {
 		if(collidedItem.Contains("FleshCube") || collidedItem.Contains("turret") || collidedItem.Contains("prism"))
 		{
 			gameEnd = true;
+			GameObject.Find("Canvas").GetComponent<Canvas> ().enabled = true;
 //			Social.ReportScore (12345, Social.localUser.id ,(bool success)=>{
 //				Social.ShowLeaderboardUI();
 //			});
 		}
 	}
-
 
 }
