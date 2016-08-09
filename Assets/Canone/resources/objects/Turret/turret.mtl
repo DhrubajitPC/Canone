@@ -1,8 +1,8 @@
-# Blender MTL File: 'None'
+# Blender MTL File: 'IMC_Sentry_Turet.obj'
 # Material Count: 2
 
 newmtl sentrygun
-Ns 92.156863
+Ns 94.117647
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
@@ -10,10 +10,10 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd C:/Users/Luccan/Downloads/models/emp3c0qor0g0-IMC_Sentry_Turet/IMC_Sentry_Turet/imc_sentry_gun_d.tga
+map_Kd C:\Users\Luccan\Downloads\models\emp3c0qor0g0-IMC_Sentry_Turet\IMC_Sentry_Turet\imc_sentry_gun_d.tga
 
 newmtl sentryguntripod
-Ns 92.156863
+Ns 94.117647
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000
 Ks 0.000000 0.000000 0.000000
@@ -21,4 +21,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd C:/Users/Luccan/Downloads/models/emp3c0qor0g0-IMC_Sentry_Turet/IMC_Sentry_Turet/imc_sentry_gun_tripod_d.tga
+map_Kd C:\Users\Luccan\Downloads\models\emp3c0qor0g0-IMC_Sentry_Turet\IMC_Sentry_Turet\imc_sentry_gun_tripod_d.tga

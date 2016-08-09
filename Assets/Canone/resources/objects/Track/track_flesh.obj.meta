@@ -15,13 +15,10 @@ ModelImporter:
     400006: //RootNode
     2300000: default_MeshPart0
     2300002: default_MeshPart1
-    2300004: default
     3300000: default_MeshPart0
     3300002: default_MeshPart1
-    3300004: default
     4300000: default_MeshPart0
     4300002: default_MeshPart1
-    4300004: default
   materials:
     importMaterials: 1
     materialName: 0
@@ -29,7 +26,7 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleCurves: 1
+    resampleRotations: 1
     optimizeGameObjects: 0
     motionNodeName: 
     animationImportErrors: 
