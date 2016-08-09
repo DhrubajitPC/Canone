@@ -88,6 +88,12 @@ public class PlayerMover : MonoBehaviour {
 		if(collidedItem.Contains("FleshCube") || collidedItem.Contains("turret") || collidedItem.Contains("prism"))
 		{
 			gameEnd = true;
+			//allow player to tumble and crash and shit
+			this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+			Vector3 collisionVector = new Vector3 (Random.Range (-100, 100), Random.Range (200, 500), -200);
+			this.GetComponent<Rigidbody> ().AddRelativeForce (collisionVector);
+			this.GetComponent<Rigidbody> ().AddTorque (collisionVector);
+			this.transform.Find ("Fire").gameObject.SetActive (true);
 //			Destroy (gameObject);
 //			GameObject.Find("Canvas").GetComponent<Canvas> ().enabled = true;
 			//TODO : show score board
