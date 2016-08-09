@@ -16,20 +16,10 @@ public class PlayerMover : MonoBehaviour {
 	public GameObject FlyingCar;
 	public GameObject Ghost;
 	public GameObject FastShip;
-
 	public Transform bulletSpawn;
 	public float fireRate;
 	public UnityEngine.UI.Text SCORE;
 	public int score;
-
-	public GameObject obstacle;
-//	public GameObject prism_flesh;
-//	public GameObject rubble_flesh;
-//	public GameObject turret_flesh;
-	public GameObject[] obstacles;
-
-	private int obsCount = 1;
-	public float obsRadius = 2.0f;
 
 	private float nextFire;
 
@@ -43,7 +33,6 @@ public class PlayerMover : MonoBehaviour {
 
 		SCORE = GameObject.Find ("Canvas").GetComponent<Text>();
 		score = 0;
-
 	}
 
 	void Update(){
@@ -56,8 +45,6 @@ public class PlayerMover : MonoBehaviour {
 			trackSegments [tileIndexToMove % 4].transform.Translate (0, 30*4, 0);
 			tileIndexToMove += 1;
 			//score display - cross 1 more tile get 10 more pts
-			obsCount ++ ;
-			randomeObstacles(trackSegments [(tileIndexToMove+1) % 4],obsCount);
 			score += 10;
 			SCORE.text = "Score : "+ score;
 		}
@@ -127,30 +114,4 @@ public class PlayerMover : MonoBehaviour {
 		character.SetActive (true);
 	}
 
-//
-	void randomeObstacles(GameObject segment, int count) {
-		
-//		foreach (Transform child in segment.transform) {
-//			GameObject.Destroy(child.gameObject);
-//		}
-
-		Vector3 randPos = Vector3.zero;
-		int myCheck = 0; //count overlap colliders
-		for(int i = 0; i < count; i++) {
-			do {
-				myCheck = 0;
-				randPos = new Vector3(Random.Range(25.0f, 25.0f), Random.Range(0.0f, 200.0f), Random.Range(-25.0f,25.0f));
-				Collider[] hitColliders = Physics.OverlapSphere(randPos, obsRadius);
-				for(int j = 0; j < hitColliders.Length; j++) {
-					if (hitColliders[j].tag == "mob") {
-						myCheck++;
-					}
-				}
-			} while (myCheck > 0);
-			GameObject clone = Instantiate(obstacles[Random.Range(0,3)],randPos, Quaternion.identity) as GameObject;  
-			clone.transform.parent = segment.transform;
-			clone.transform.localPosition = randPos;
-		}
-	}
-} 
-	
+}
