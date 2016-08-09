@@ -29,16 +29,6 @@ public class PlayerMover : MonoBehaviour {
 	void Start(){
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
 		gameEnd = false;
-//		GameObject.Find("Canvas").GetComponent<Canvas> ().enabled = false;
-//		trackSegments = new GameObject[] {
-//			GameObject.Find ("TrackSegment1"),
-//			GameObject.Find ("TrackSegment2"),
-//			GameObject.Find ("TrackSegment3"),
-//			GameObject.Find ("TrackSegment4")};
-		
-//		Ghost = GameObject.Find ("Ghost");
-//		FastShip = GameObject.Find ("FastShip");
-//		FlyingCar = GameObject.Find ("FlyingCar");
 		switchCharacter (FastShip);
 
 		SCORE = GameObject.Find ("Canvas").GetComponent<Text>();

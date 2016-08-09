@@ -74,13 +74,7 @@ public class TrackRotater : MonoBehaviour {
 			float rotation = relativeRotation ((currentRotation * userRotation).eulerAngles.z, initRot);
 			if (Mathf.Abs (tilt) > minRotateSpeed && Mathf.Abs (rotation) <= maxRot) 
 			{
-				Debug.Log (transform.position.x);
-				Debug.Log (transform.position.y);
-				Debug.Log (transform.position.z);
 				transform.Rotate (-tilt * Vector3.forward);
-				Debug.Log (transform.position.x);
-				Debug.Log (transform.position.y);
-				Debug.Log (transform.position.z);
 			}
 
 			float z_rot = relativeRotation (currentRotation.eulerAngles.z, initRot);
