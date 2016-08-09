@@ -20,8 +20,24 @@ public class TrackRotater : MonoBehaviour {
         return res;
     }
 
+	void Update(){
+		if (!PlayerMover.gameEnd) {
+			if (Input.GetKeyDown ("space")) {
+				initRot = initRot > 0 ? -4.0f : 176f;
+				GameObject.Find ("Player").transform.Translate (new Vector3 (0, 0.5f, 0));
+				transform.Rotate (new Vector3 (0, 0, 180f));
+			}
+		}
+	}
+
     void FixedUpdate () {
         if (!PlayerMover.gameEnd){
+//			if (Input.GetKeyDown ("space")) {
+//				initRot = initRot >0? -4.0f: 176f;
+//				GameObject.Find ("Player").transform.Translate (new Vector3(0, 0.3f ,0));
+//				transform.Rotate (new Vector3 (0, 0, 180f));
+//			}
+
 #if UNITY_EDITOR
             float tilt = Input.GetAxis("Horizontal");
 #else
@@ -46,11 +62,7 @@ public class TrackRotater : MonoBehaviour {
 				transform.rotation = Quaternion.Euler(new Vector3(0, 0, initRot - maxRot));
 			}
 
-			if (Input.GetKeyDown ("space")) {
-				initRot = initRot >0? -4.0f: 176f;
-				GameObject.Find ("Player").transform.Translate (new Vector3(0, 0.3f ,0));
-				transform.Rotate (new Vector3 (0, 0, 180f));
-			}
+
 		}
 	}
 
