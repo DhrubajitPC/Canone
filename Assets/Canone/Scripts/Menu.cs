@@ -59,8 +59,8 @@ public class Menu : MonoBehaviour {
 	}
 
 	public void Update(){
-		if (true){
-//		if (Social.localUser.authenticated) {
+//		if (true){
+		if (Social.localUser.authenticated) {
 			play.GetComponent<Button> ().interactable = true;
 			sOut.SetActive (true);
 			sIn.SetActive (false);

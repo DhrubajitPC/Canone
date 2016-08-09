@@ -6,8 +6,22 @@ public class TrackRotater : MonoBehaviour {
     private float minRotateSpeed = 0.1f;
     private float maxRotateSpeed = 0.5f;
 
+	private GameObject player;
+
     private float maxRot = 75.0f;
     private float initRot = -4.0f; //Modify this when you are changing the track from ground to ceiling!
+
+	private static float accelerometerUpdateInterval = 1.0f / 60.0f;
+	// The greater the value of LowPassKernelWidthInSeconds, the slower the filtered value will converge towards current input sample (and vice versa).
+	private static float lowPassKernelWidthInSeconds = 1.0f;
+	// This next parameter is initialized to 2.0 per Apple's recommendation, or at least according to Brady! ;)
+	private static float shakeDetectionThreshold = 2.0f;
+
+	private static float lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
+	private static Vector3 lowPassValue = Vector3.zero;
+	private static Vector3 acceleration;
+	private static Vector3 deltaAcceleration;
+
 
     //returns the relative rotation in terms of -180 and 180 from init
     float relativeRotation(float rot, float init)
@@ -20,8 +34,35 @@ public class TrackRotater : MonoBehaviour {
         return res;
     }
 
+	void Start(){
+		player = GameObject.Find ("Player");
+		shakeDetectionThreshold *= shakeDetectionThreshold;
+		lowPassValue = Input.acceleration;
+	}
+
+	void Update(){
+		if (!PlayerMover.gameEnd) {
+#if UNITY_EDITOR
+			bool rotate = Input.GetKeyDown ("space");
+#else
+			acceleration = Input.acceleration;
+			lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
+			deltaAcceleration = acceleration - lowPassValue;
+			bool rotate = deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold;
+#endif
+			if (rotate) {
+				initRot = initRot > 0 ? -4.0f : 176f;
+				player.transform.position = new Vector3 (player.transform.position.x, 
+					1.6f, 
+					player.transform.position.z);
+				transform.Rotate (Vector3.forward * 180f);
+			}
+		}
+	}
+
     void FixedUpdate () {
         if (!PlayerMover.gameEnd){
+
 #if UNITY_EDITOR
             float tilt = Input.GetAxis("Horizontal");
 #else
@@ -33,7 +74,13 @@ public class TrackRotater : MonoBehaviour {
 			float rotation = relativeRotation ((currentRotation * userRotation).eulerAngles.z, initRot);
 			if (Mathf.Abs (tilt) > minRotateSpeed && Mathf.Abs (rotation) <= maxRot) 
 			{
-				transform.Rotate (new Vector3 (0, 0, -1) * tilt);
+				Debug.Log (transform.position.x);
+				Debug.Log (transform.position.y);
+				Debug.Log (transform.position.z);
+				transform.Rotate (-tilt * Vector3.forward);
+				Debug.Log (transform.position.x);
+				Debug.Log (transform.position.y);
+				Debug.Log (transform.position.z);
 			}
 
 			float z_rot = relativeRotation (currentRotation.eulerAngles.z, initRot);
@@ -44,12 +91,6 @@ public class TrackRotater : MonoBehaviour {
 			}
 			else if (z_rot < -maxRot) {
 				transform.rotation = Quaternion.Euler(new Vector3(0, 0, initRot - maxRot));
-			}
-
-			if (Input.GetKeyDown ("space")) {
-				initRot = initRot >0? -4.0f: 176f;
-				GameObject.Find ("Player").transform.Translate (new Vector3(0, 0.3f ,0));
-				transform.Rotate (new Vector3 (0, 0, 180f));
 			}
 		}
 	}
