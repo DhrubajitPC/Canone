@@ -34,6 +34,10 @@ public class PlayerMover : MonoBehaviour {
 			GameObject.Find ("TrackSegment4")};
 	}
 
+	void Update(){
+		
+	}
+
 	void FixedUpdate () {
 		if (this.transform.position.z > 30 * (tileIndexToMove + 1)) {
 			trackSegments [tileIndexToMove % 4].transform.Translate (0, 30*4, 0);
