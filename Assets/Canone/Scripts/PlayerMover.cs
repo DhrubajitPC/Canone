@@ -15,6 +15,8 @@ public class PlayerMover : MonoBehaviour {
 	public GameObject bullet;
 	public Transform bulletSpawn;
 	public float fireRate;
+	public UnityEngine.UI.Text SCORE;
+	public int score;
 
 	private float nextFire;
 
@@ -25,13 +27,16 @@ public class PlayerMover : MonoBehaviour {
 	
 
 	void Start(){
+		Screen.orientation = ScreenOrientation.LandscapeLeft;
 		gameEnd = false;
-		GameObject.Find("Canvas").GetComponent<Canvas> ().enabled = false;
+//		GameObject.Find("Canvas").GetComponent<Canvas> ().enabled = false;
 		trackSegments = new GameObject[] {
 			GameObject.Find ("TrackSegment1"),
 			GameObject.Find ("TrackSegment2"),
 			GameObject.Find ("TrackSegment3"),
 			GameObject.Find ("TrackSegment4")};
+		SCORE = GameObject.Find ("Canvas").GetComponent<Text>();
+		score = 0;
 	}
 
 	void Update(){
@@ -42,6 +47,8 @@ public class PlayerMover : MonoBehaviour {
 		if (this.transform.position.z > 30 * (tileIndexToMove + 1)) {
 			trackSegments [tileIndexToMove % 4].transform.Translate (0, 30*4, 0);
 			tileIndexToMove += 1;
+			score += 10;
+			SCORE.text = "Score : "+ score;
 		}
 		if (!gameEnd){
 			transform.Translate (Vector3.forward * playerMovingSpeed);
@@ -69,10 +76,10 @@ public class PlayerMover : MonoBehaviour {
 		if(collidedItem.Contains("FleshCube") || collidedItem.Contains("turret") || collidedItem.Contains("prism"))
 		{
 			gameEnd = true;
-			GameObject.Find("Canvas").GetComponent<Canvas> ().enabled = true;
-//			Social.ReportScore (12345, Social.localUser.id ,(bool success)=>{
-//				Social.ShowLeaderboardUI();
-//			});
+//			GameObject.Find("Canvas").GetComponent<Canvas> ().enabled = true;
+			Social.ReportScore (12345, "CgkIsbPEkt4TEAIQAQ" ,(bool success)=>{
+				Social.ShowLeaderboardUI();
+			});
 		}
 	}
 
