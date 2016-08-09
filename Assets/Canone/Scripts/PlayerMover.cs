@@ -88,9 +88,14 @@ public class PlayerMover : MonoBehaviour {
 //			Destroy (gameObject);
 //			GameObject.Find("Canvas").GetComponent<Canvas> ().enabled = true;
 			//TODO : show score board
-//			Social.ReportScore (12345, "CgkIsbPEkt4TEAIQAQ" ,(bool success)=>{
-//				Social.ShowLeaderboardUI();
-//			});
+			Social.localUser.Authenticate ((bool success) => {
+				if (success) {
+					Social.ReportScore (score, "CgkIsbPEkt4TEAIQAQ" ,(bool success1)=>{
+						Social.ShowLeaderboardUI();
+					});
+				}
+			});
+
 		}
 
 		// pick up powerups 
