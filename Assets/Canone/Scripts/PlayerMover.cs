@@ -7,12 +7,15 @@ using GooglePlayGames;
 using UnityEngine.UI;
 
 public class PlayerMover : MonoBehaviour {
-	private GameObject[] trackSegments;
+	public GameObject[] trackSegments;
 	private float playerMovingSpeed = 0.1f;
 	private int tileIndexToMove = 0;
 	public static bool gameEnd = false;
 
 	public GameObject bullet;
+	public GameObject FlyingCar;
+	public GameObject Ghost;
+	public GameObject FastShip;
 	public Transform bulletSpawn;
 	public float fireRate;
 	public UnityEngine.UI.Text SCORE;
@@ -23,18 +26,21 @@ public class PlayerMover : MonoBehaviour {
 	private int bulletsLeft = 3;
 	private float bulletCountDownTimer = 3;
 
-//	List<GameObject> bullets = new List<GameObject>();
-	
-
 	void Start(){
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
 		gameEnd = false;
 //		GameObject.Find("Canvas").GetComponent<Canvas> ().enabled = false;
-		trackSegments = new GameObject[] {
-			GameObject.Find ("TrackSegment1"),
-			GameObject.Find ("TrackSegment2"),
-			GameObject.Find ("TrackSegment3"),
-			GameObject.Find ("TrackSegment4")};
+//		trackSegments = new GameObject[] {
+//			GameObject.Find ("TrackSegment1"),
+//			GameObject.Find ("TrackSegment2"),
+//			GameObject.Find ("TrackSegment3"),
+//			GameObject.Find ("TrackSegment4")};
+		
+//		Ghost = GameObject.Find ("Ghost");
+//		FastShip = GameObject.Find ("FastShip");
+//		FlyingCar = GameObject.Find ("FlyingCar");
+		switchCharacter (FastShip);
+
 		SCORE = GameObject.Find ("Canvas").GetComponent<Text>();
 		score = 0;
 	}
@@ -44,9 +50,11 @@ public class PlayerMover : MonoBehaviour {
 	}
 
 	void FixedUpdate () {
-		if (this.transform.position.z > 30 * (tileIndexToMove + 1)) {
+		// endless track
+		if (this.transform.position.z > 30 * (tileIndexToMove + 1) + 10) {
 			trackSegments [tileIndexToMove % 4].transform.Translate (0, 30*4, 0);
 			tileIndexToMove += 1;
+			//score display - cross 1 more tile get 10 more pts
 			score += 10;
 			SCORE.text = "Score : "+ score;
 		}
@@ -73,14 +81,36 @@ public class PlayerMover : MonoBehaviour {
 	void OnCollisionEnter (Collision other)
 	{
 		string collidedItem = other.gameObject.name;
+		//end game if obstacles are hit
 		if(collidedItem.Contains("FleshCube") || collidedItem.Contains("turret") || collidedItem.Contains("prism"))
 		{
 			gameEnd = true;
+//			Destroy (gameObject);
 //			GameObject.Find("Canvas").GetComponent<Canvas> ().enabled = true;
-			Social.ReportScore (12345, "CgkIsbPEkt4TEAIQAQ" ,(bool success)=>{
-				Social.ShowLeaderboardUI();
-			});
+			//TODO : show score board
+//			Social.ReportScore (12345, "CgkIsbPEkt4TEAIQAQ" ,(bool success)=>{
+//				Social.ShowLeaderboardUI();
+//			});
 		}
+
+		// pick up powerups 
+		if (collidedItem.Contains ("Pickup")) {
+			Destroy (other.gameObject);
+			if (collidedItem.Contains ("Fast")) {
+				switchCharacter (FastShip);
+			} else if (collidedItem.Contains ("Flying")) {
+				switchCharacter (FlyingCar);
+			} else {
+				switchCharacter (Ghost);
+			}
+		}
+	}
+
+	void switchCharacter(GameObject character){
+		Ghost.SetActive (false);
+		FlyingCar.SetActive (false);
+		FastShip.SetActive (false);
+		character.SetActive (true);
 	}
 
 }
