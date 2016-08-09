@@ -21,7 +21,7 @@ public class PlayerMover : MonoBehaviour {
 	private int bulletsLeft = 3;
 	private float bulletCountDownTimer = 3;
 
-	List<GameObject> bullets = new List<GameObject>();
+//	List<GameObject> bullets = new List<GameObject>();
 	
 
 	void Start(){
@@ -47,7 +47,7 @@ public class PlayerMover : MonoBehaviour {
 				GameObject b = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
 				b.transform.parent = GameObject.Find ("Track").transform;
 	
-				bullets.Add (b);
+//				bullets.Add (b);
 			}
 			if (bulletsLeft == 0) {
 				bulletCountDownTimer -= Time.deltaTime;
@@ -55,15 +55,6 @@ public class PlayerMover : MonoBehaviour {
 			if (bulletCountDownTimer < 0) {
 				bulletsLeft = 3;
 				bulletCountDownTimer = 3;
-			}
-
-			if (bullets.Count > 0) {
-				foreach (GameObject b in bullets) {
-					if (b.transform.position.z - this.transform.position.z > 15) {
-						bullets.Remove (b);
-						Destroy (b);
-					}
-				}
 			}
 		}	
 	}
