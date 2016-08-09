@@ -95,7 +95,7 @@ public class PlayerMover : MonoBehaviour {
 				switchCharacter (FastShip);
 			} else if (collidedItem.Contains ("Flying")) {
 				switchCharacter (FlyingCar);
-			} else {
+			} else if (collidedItem.Contains ("Ghost")){
 				switchCharacter (Ghost);
 			}
 		}

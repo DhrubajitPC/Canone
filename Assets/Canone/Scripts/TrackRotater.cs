@@ -9,7 +9,7 @@ public class TrackRotater : MonoBehaviour {
 	private GameObject player;
 
     private float maxRot = 75.0f;
-    private float initRot = -4.0f; //Modify this when you are changing the track from ground to ceiling!
+    private float initRot = 0f; //Modify this when you are changing the track from ground to ceiling!
 
 	private static float accelerometerUpdateInterval = 1.0f / 60.0f;
 	// The greater the value of LowPassKernelWidthInSeconds, the slower the filtered value will converge towards current input sample (and vice versa).
@@ -51,7 +51,7 @@ public class TrackRotater : MonoBehaviour {
 			bool rotate = deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold;
 #endif
 			if (rotate) {
-				initRot = initRot > 0 ? -4.0f : 176f;
+				initRot = initRot == 0 ? 180f : 0f;
 				player.transform.position = new Vector3 (player.transform.position.x, 
 					1.6f, 
 					player.transform.position.z);
