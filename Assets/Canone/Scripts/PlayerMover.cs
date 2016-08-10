@@ -143,10 +143,22 @@ public class PlayerMover : MonoBehaviour {
 			transform.GetComponent<AudioSource> ().Play ();
 			Destroy (other.gameObject);
 			if (collidedItem.Contains ("Fast")) {
+				if (ghostBehaviour != null) {
+					ghostBehaviour.cancel ();
+				}
+				if (agilityBehaviour != null) {
+					agilityBehaviour.cancel ();
+				}
 				switchCharacter (FastShip);
 			} else if (collidedItem.Contains ("Flying")) {
+				if (ghostBehaviour != null) {
+					ghostBehaviour.cancel ();
+				}
 				switchCharacter (FlyingCar);
 			} else if (collidedItem.Contains ("Ghost")){
+				if (agilityBehaviour != null) {
+					agilityBehaviour.cancel ();
+				}
 				switchCharacter (Ghost);
 			}
 		}

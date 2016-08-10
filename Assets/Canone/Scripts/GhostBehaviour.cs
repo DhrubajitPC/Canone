@@ -17,18 +17,25 @@ public class GhostBehaviour : MonoBehaviour {
 			cooling = 0f;
 		}
 	}
+
+	public void cancel(){
+		timer = 0f;
+		TimeLeftDisplay.GetComponent<UIBarScript> ().UpdateValue (0,3);
+		TimeLeftDisplay.SetActive (false);
+		on = false;
+	}
 	
 	// Update is called once per frame
 	public float UpdateTimeLeft (float deltaTime) {
 		if (on){
 			if (timer <= 0) {
-				TimeLeftDisplay.GetComponent<Text> ().text = "";
+				TimeLeftDisplay.GetComponent<UIBarScript> ().UpdateValue (0,3);
 				TimeLeftDisplay.SetActive (false);
 				on = false;
 			}  else {
 				TimeLeftDisplay.SetActive (true);
 				timer -= deltaTime;
-				TimeLeftDisplay.GetComponent<Text>().text = "Time Left : "+timer;
+				TimeLeftDisplay.GetComponent<UIBarScript> ().UpdateValue ((int)timer*10,30);
 			}
 		}else {
 			if(!firstTime){cooling += deltaTime;}
