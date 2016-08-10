@@ -9,7 +9,7 @@ public class GhostBehaviour : MonoBehaviour {
 
 	public void TurnOnInvisibleMode(){
 		on = true;
-		timer = 10f;
+		timer = 5f;
 	}
 	
 	// Update is called once per frame
