@@ -3,7 +3,6 @@ using System.Collections;
 
 public class TrackRotater : MonoBehaviour {
 
-	public bool metalTrack = false; //false is flesh, true is metal
 	//private float rotateSpeed = 0.2f;
     private float minRotateSpeed = 0.1f;
     private float maxRotateSpeed = 0.5f;
@@ -53,8 +52,6 @@ public class TrackRotater : MonoBehaviour {
 			bool rotate = deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold;
 #endif
 			if (rotate) {
-				metalTrack = !metalTrack;
-//				print(metalTrack);
 				initRot = initRot == 0 ? 180f : 0f;
 				player.transform.position = new Vector3 (player.transform.position.x, 
 					1.6f, 
