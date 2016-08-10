@@ -6,6 +6,7 @@ public class ObstacleGenerator : MonoBehaviour {
     public GameObject[] trackSegments;
     private int tileIndexToMove = 0;
     private GameObject[] ObsHolder = new GameObject[60];
+    private int difficulty = 1; //1 to 15
     public GameObject[] ObstacleTypes = new GameObject[8];
 
     // Use this for initialization
@@ -26,18 +27,22 @@ public class ObstacleGenerator : MonoBehaviour {
             trackSegments[tileIndexToMove % 4].transform.Translate(0, 30 * 4, 0);
 
             //obstacles generation
-            ObstacleGeneration();
+            int difficulty = (int) (1+ Mathf.Min(PlayerMover.time_in_game / 20.0f, 4) + Mathf.Min(PlayerMover.time_in_game / 60.0f, 5) + Mathf.Min(PlayerMover.time_in_game / 90.0f, 5));
+            PlayerMover.playerAccelerateFactor = 1.0f + (difficulty/15.0f);
+            ObstacleGeneration(difficulty);
             //ObstacleReposition();
             
             tileIndexToMove += 1;
         }
     }
 
-    public void ObstacleGeneration()
+    public void ObstacleGeneration(int difficulty)
     {
+        print(difficulty);
         float generationRange = trackSegments[tileIndexToMove % 4].transform.position.z;
         float gap = 1f;
-        for (int i = (tileIndexToMove % 4) * 15; i < ((tileIndexToMove % 4) + 1) * 15; i++)
+        //for (int i = (tileIndexToMove % 4) * 15; i < ((tileIndexToMove % 4) + 1) * 15; i++)
+        for (int i = (tileIndexToMove % 4) * 15; i < ((tileIndexToMove % 4) * 15)+difficulty; i++)
         {
             float offset = Random.Range(0f, 1f) >= 0.5 ? 0 : 180;
             float deg = Random.Range(10, 170) + offset;
@@ -47,8 +52,8 @@ public class ObstacleGenerator : MonoBehaviour {
                 itemToPlace = ObstacleTypes[Random.Range(4, 8)];
             }
 
-            Debug.Log(itemToPlace.gameObject.name);
-            Debug.Log(offset);
+            //Debug.Log(itemToPlace.gameObject.name);
+            //Debug.Log(offset);
 
             float trackz = GameObject.Find("Track").transform.rotation.eulerAngles.z;
             deg = (trackz+deg) % 360; //make degree follow trackz

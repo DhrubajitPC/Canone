@@ -8,8 +8,8 @@ using UnityEngine.UI;
 
 public class PlayerMover : MonoBehaviour {
 	private float playerMovingSpeed = 0.2f;
-    private float playerAccelerateFactor = 1.0f;
-    private float time_in_game = 0;
+    public static float playerAccelerateFactor = 1.0f;
+    public static float time_in_game = 0;
 
 	public static bool gameEnd = false;
     public static bool was_alive = true;
@@ -47,7 +47,6 @@ public class PlayerMover : MonoBehaviour {
 		if (ghostBehaviour != null) {
 			ghostBehaviour.UpdateTimeLeft (Time.deltaTime);
 		}
-        //playerAccelerateFactor += Mathf.Max(1.0f + (time_in_game / 600), 2.0f);
     }
 
 	void FixedUpdate () {
