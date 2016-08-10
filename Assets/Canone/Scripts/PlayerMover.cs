@@ -19,6 +19,7 @@ public class PlayerMover : MonoBehaviour {
 	public GameObject FlyingCar;
 	public GameObject Ghost;
 	private GhostBehaviour ghostBehaviour = null;
+	private AgilityBehaviour agilityBehaviour = null;
 	public GameObject FastShip;
 	private GameObject currentCharacter;
 
@@ -50,6 +51,11 @@ public class PlayerMover : MonoBehaviour {
 		if (ghostBehaviour != null) {
 			ghostBehaviour.UpdateTimeLeft (Time.deltaTime);
 		}
+		playerAgilityFactor = 1.0f;
+		if (agilityBehaviour != null) {
+			float timer = agilityBehaviour.UpdateTimeLeft (Time.deltaTime);
+			if (timer > 0){playerAgilityFactor = 2f;}
+		}
     }
 
 	void FixedUpdate () {
@@ -57,8 +63,12 @@ public class PlayerMover : MonoBehaviour {
             score = (int)(time_in_game * 100);
             SCORE.text = "Score : " + score;
 
-			if (ghostBehaviour != null && Input.GetKeyDown ("s")) {
+			if (ghostBehaviour != null && Input.GetButton ("Fire1")) {
 				ghostBehaviour.TurnOnInvisibleMode ();
+			}
+
+			if (agilityBehaviour != null && Input.GetButton ("Fire1")) {
+				agilityBehaviour.TurnOnAgileMode ();
 			}
 
             transform.Translate (Vector3.forward * playerMovingSpeed);
@@ -135,17 +145,17 @@ public class PlayerMover : MonoBehaviour {
 		character.SetActive (true);
 		currentCharacter = character;
 		ghostBehaviour = null;
+		agilityBehaviour = null;
         if (character.gameObject.name.Contains("Ghost"))
         {
             ghostBehaviour = (GhostBehaviour)character.gameObject.GetComponent<GhostBehaviour>();
             //ghostBehaviour.timer = 10f;
         }
+
         if (character.gameObject.name.Contains("FlyingCar"))
         {
-            playerAgilityFactor = 1.5f;
-        } else
-        {
-            playerAgilityFactor = 1.0f;
-        }
+			agilityBehaviour = (AgilityBehaviour)character.gameObject.GetComponent<AgilityBehaviour> ();
+        } 
+		playerAgilityFactor = 1.0f;
     }
 }
