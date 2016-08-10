@@ -23,6 +23,13 @@ public class TrackRotater : MonoBehaviour {
 
 	private float lastRotate = 0.0f;
 
+	public void restart(){
+		player = GameObject.Find ("Player");
+		shakeDetectionThreshold *= shakeDetectionThreshold;
+		lowPassValue = Input.acceleration;
+		lastRotate = 0.0f;
+	}
+
     //returns the relative rotation in terms of -180 and 180 from init
     float relativeRotation(float rot, float init)
     {
@@ -35,9 +42,7 @@ public class TrackRotater : MonoBehaviour {
     }
 
 	void Start(){
-		player = GameObject.Find ("Player");
-		shakeDetectionThreshold *= shakeDetectionThreshold;
-		lowPassValue = Input.acceleration;
+		restart ();
 	}
 
 	void Update(){

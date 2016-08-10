@@ -105,6 +105,7 @@ public class PlayerMover : MonoBehaviour {
             this.GetComponent<Rigidbody>().AddRelativeForce(collisionVector);
             this.GetComponent<Rigidbody>().AddTorque(collisionVector);
             this.transform.Find("Fire").gameObject.SetActive(true);
+			GameObject.Find ("DestructionSoundManager").GetComponents<AudioSource> () [1].Play ();
 
 			StartCoroutine (showLeaderboard ());
         }
