@@ -39,12 +39,12 @@ public class ObstacleGenerator : MonoBehaviour {
         for (int i = (tileIndexToMove % 4) * 15; i < (tileIndexToMove % 4 + 1) * 15; i++)
         {
             float offset = Random.Range(0f, 1f) >= 0.5 ? 0 : 180;
-            float deg = Random.Range(20, 160) + offset;
+            float deg = Random.Range(10, 170) + offset;
             GameObject itemToPlace = deg <= 180 ? ObstacleTypes[Random.Range(4, 8)] : ObstacleTypes[Random.Range(0, 4)];
 
             Debug.Log(itemToPlace.gameObject.name);
             Debug.Log(offset);
-            //			Debug.Log (deg);
+            //Debug.Log (deg);
 
             float trackz = GameObject.Find("Track").transform.rotation.eulerAngles.z;
             deg = (deg + trackz) % 360;
