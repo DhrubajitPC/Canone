@@ -33,6 +33,7 @@ public class CameraMover : MonoBehaviour {
 	}
 
 	public void restartGame(){
+		GameObject.Find ("Player").GetComponent<PlayerMover> ().restart ();
 		SceneManager.LoadScene("TrackScene");
 	}
 }

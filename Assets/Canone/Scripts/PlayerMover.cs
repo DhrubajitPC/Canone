@@ -35,14 +35,20 @@ public class PlayerMover : MonoBehaviour {
 	private int bulletsLeft = 3;
 	private float bulletCountDownTimer = 3;
 
-	void Start(){
-		Screen.orientation = ScreenOrientation.LandscapeLeft;
+	public void restart(){
 		gameEnd = false;
+		was_alive = true;
 		switchCharacter (FastShip);
 		RestartButton.SetActive (false);
 
 		SCORE = GameObject.Find ("Canvas").GetComponent<Text>();
 		score = 0;
+		time_in_game = 0;
+	}
+
+	void Start(){
+		Screen.orientation = ScreenOrientation.LandscapeLeft;
+		restart ();
 	}
 
     void Update()
@@ -53,8 +59,8 @@ public class PlayerMover : MonoBehaviour {
 		}
 		playerAgilityFactor = 1.0f;
 		if (agilityBehaviour != null) {
-			float timer = agilityBehaviour.UpdateTimeLeft (Time.deltaTime);
-			if (timer > 0){playerAgilityFactor = 2f;}
+			agilityBehaviour.UpdateTimeLeft (Time.deltaTime);
+			if (agilityBehaviour.on){playerAgilityFactor = 5f;}
 		}
     }
 
@@ -99,17 +105,23 @@ public class PlayerMover : MonoBehaviour {
             this.GetComponent<Rigidbody>().AddTorque(collisionVector);
             this.transform.Find("Fire").gameObject.SetActive(true);
 
-            //show score board
-            Social.localUser.Authenticate((bool success) => {
-                if (success)
-                {
-                    Social.ReportScore(score, "CgkIsbPEkt4TEAIQAQ", (bool success1) => {
-                        Social.ShowLeaderboardUI();
-                    });
-                }
-            });
-			RestartButton.SetActive (true);
+			StartCoroutine (showLeaderboard ());
         }
+	}
+
+	IEnumerator showLeaderboard(){
+		yield return new WaitForSeconds(3.0f);
+		//show score board
+		Social.localUser.Authenticate((bool success) => {
+			if (success)
+			{
+				Social.ReportScore(score, "CgkIsbPEkt4TEAIQAQ", (bool success1) => {
+					Social.ShowLeaderboardUI();
+				});
+			}
+		});
+		RestartButton.SetActive (true);
+		yield return 0;
 	}
 
 	void OnCollisionEnter (Collision other)
