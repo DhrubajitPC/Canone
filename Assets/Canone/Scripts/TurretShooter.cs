@@ -25,12 +25,13 @@ public class TurretShooter : MonoBehaviour {
 		if (dist > 4) {
 			transform.LookAt (player.transform);
 		}
-		print (gameObject.name);
+//		print (gameObject.name);
 		if (gameObject.name == "turret(Clone)" && angle < 30f && dist < 30) {
 			if (canShoot) {
 				GameObject b = Instantiate (bullet, bulletSpawn.position, transform.rotation) as GameObject;
 				b.transform.parent = GameObject.Find ("Track").transform;
 //				b.transform.LookAt (player.transform);
+				gameObject.GetComponent<AudioSource> ().Play ();
 				canShoot = false;
 			}
 			bulletCountDownTimer -= Time.deltaTime;
@@ -42,6 +43,8 @@ public class TurretShooter : MonoBehaviour {
 			GameObject b = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
 			b.transform.parent = GameObject.Find ("Track").transform;
 			b.transform.LookAt (player.transform);
+			gameObject.GetComponent<AudioSource> ().mute = false;
+
 		}
 	
 	}

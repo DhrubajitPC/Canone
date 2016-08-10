@@ -38,7 +38,7 @@ public class ObstacleGenerator : MonoBehaviour {
 
     public void ObstacleGeneration(int difficulty)
     {
-        print(difficulty);
+        print("difficulty: "+difficulty);
         float generationRange = trackSegments[tileIndexToMove % 4].transform.position.z;
         float gap = 1f;
         //for (int i = (tileIndexToMove % 4) * 15; i < ((tileIndexToMove % 4) + 1) * 15; i++)

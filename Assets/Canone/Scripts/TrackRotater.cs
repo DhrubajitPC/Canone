@@ -20,6 +20,7 @@ public class TrackRotater : MonoBehaviour {
 
 	private static float lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
 	private static Vector3 lowPassValue = Vector3.zero;
+	private AudioSource [] aSources;
 
 
     //returns the relative rotation in terms of -180 and 180 from init
@@ -37,6 +38,8 @@ public class TrackRotater : MonoBehaviour {
 		player = GameObject.Find ("Player");
 		shakeDetectionThreshold *= shakeDetectionThreshold;
 		lowPassValue = Input.acceleration;
+		aSources = Camera.main.GetComponents<AudioSource>();
+
 	}
 
 	void Update(){
@@ -49,8 +52,20 @@ public class TrackRotater : MonoBehaviour {
 			Vector3 deltaAcceleration = acceleration - lowPassValue;
 			bool rotate = deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold;
 #endif
+//			if (initRot == 0) {
+//				//enable bg 1
+//				print("zerg");
+//				aSources [1].mute = true;
+//				aSources [0].mute = false;
+//			} else {
+//				print ("protos");
+//				aSources [0].mute = true;
+//				aSources [1].mute = false;
+//				// enable bg 2
+//			}
 			if (rotate) {
 				initRot = initRot == 0 ? 180f : 0f;
+
 				player.transform.position = new Vector3 (player.transform.position.x, 
 					1.6f, 
 					player.transform.position.z);

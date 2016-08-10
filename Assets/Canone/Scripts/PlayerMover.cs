@@ -76,6 +76,7 @@ public class PlayerMover : MonoBehaviour {
 			if (Input.GetButton ("Fire1") && Time.time > nextFire && bulletsLeft > 0) {
 				bulletsLeft -= 1;
 				nextFire = Time.time + fireRate;
+				GameObject.Find ("FastShip").GetComponent<AudioSource> ().Play();
 				GameObject b = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
 				b.transform.parent = GameObject.Find ("Track").transform;
 			}
@@ -127,6 +128,7 @@ public class PlayerMover : MonoBehaviour {
 
 		// pick up powerups 
 		if (collidedItem.Contains ("Pickup")) {
+			transform.GetComponent<AudioSource> ().Play ();
 			Destroy (other.gameObject);
 			if (collidedItem.Contains ("Fast")) {
 				switchCharacter (FastShip);
