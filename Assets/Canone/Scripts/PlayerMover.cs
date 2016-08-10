@@ -21,6 +21,8 @@ public class PlayerMover : MonoBehaviour {
 	public GameObject FastShip;
 	private GameObject currentCharacter;
 
+	public GameObject RestartButton;
+
 	public Transform bulletSpawn;
 	public float fireRate;
 	public UnityEngine.UI.Text SCORE;
@@ -35,6 +37,7 @@ public class PlayerMover : MonoBehaviour {
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
 		gameEnd = false;
 		switchCharacter (FastShip);
+		RestartButton.SetActive (false);
 
 		SCORE = GameObject.Find ("Canvas").GetComponent<Text>();
 		score = 0;
@@ -95,6 +98,7 @@ public class PlayerMover : MonoBehaviour {
                     });
                 }
             });
+			RestartButton.SetActive (true);
         }
 	}
 
