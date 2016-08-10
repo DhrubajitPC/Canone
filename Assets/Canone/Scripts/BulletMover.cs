@@ -14,7 +14,7 @@ public class BulletMover : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		this.GetComponent<Rigidbody> ().velocity = transform.parent.transform.forward * speed;
-		if (this.transform.position.z - player.transform.position.z > 15) {
+		if (this.transform.position.z - player.transform.position.z > 45) {
 			Destroy (gameObject);
 		}
 	}
