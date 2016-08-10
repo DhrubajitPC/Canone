@@ -129,9 +129,13 @@ public class PlayerMover : MonoBehaviour {
 		Vector3 randPos = Vector3.zero;
 		int myCheck = 0; //count overlap colliders
 		for(int i = 0; i < count; i++) {
+			GameObject obstacle = obstacles [Random.Range (0, 3)];
 			do {
 				myCheck = 0;
-				randPos = new Vector3(Random.Range(25.0f, 25.0f), Random.Range(0.0f, 200.0f), Random.Range(-25.0f,25.0f));
+				if (obstacle.gameObject.name == "turret_flesh") {
+					randPos = new Vector3(Random.Range(29.0f, 29.5f), Random.Range(0.0f, 200.0f), Random.Range(-25.0f,25.0f));
+				}else{
+					randPos = new Vector3(Random.Range(25.0f, 25.0f), Random.Range(0.0f, 200.0f), Random.Range(-25.0f,25.0f));}
 				Collider[] hitColliders = Physics.OverlapSphere(randPos, obsRadius);
 				for(int j = 0; j < hitColliders.Length; j++) {
 					if (hitColliders[j].tag == "mob") {
@@ -139,8 +143,8 @@ public class PlayerMover : MonoBehaviour {
 					}
 				}
 			} while (myCheck > 0);
-			GameObject obstacle = obstacles [Random.Range (0, 3)];
 
+		
 			GameObject clone = Instantiate(obstacle,randPos, Quaternion.identity) as GameObject;  
 			clone.transform.parent = segment.transform;
 			clone.transform.localPosition = randPos;
