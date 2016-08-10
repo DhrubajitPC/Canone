@@ -16,19 +16,21 @@ public class PlayerMover : MonoBehaviour {
 	public GameObject FlyingCar;
 	public GameObject Ghost;
 	public GameObject FastShip;
+	private GameObject currentCharacter;
+
 	public Transform bulletSpawn;
 	public float fireRate;
 	public UnityEngine.UI.Text SCORE;
 	public int score;
 
-	public GameObject[] obstacles;
-	private int obsCount = 1;
-	public float obsRadius = 2.0f;
-
 	private float nextFire;
 
 	private int bulletsLeft = 3;
 	private float bulletCountDownTimer = 3;
+
+	public GameObject[] ObsHolder = new GameObject[60];
+	public GameObject[] ObstacleTypes = new GameObject[8];
+	private static readonly Random random = new Random();
 
 	void Start(){
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
@@ -39,19 +41,15 @@ public class PlayerMover : MonoBehaviour {
 		score = 0;
 	}
 
-	void Update(){
-		
-	}
-
 	void FixedUpdate () {
 		// endless track
 		if (this.transform.position.z > 30 * (tileIndexToMove + 1) + 10) {
 			trackSegments [tileIndexToMove % 4].transform.Translate (0, 30*4, 0);
+
+			//obstacles generation
+			ObstacleGeneration ();
+
 			tileIndexToMove += 1;
-			if (tileIndexToMove % 4 == 0) {
-				obsCount++;
-			}
-			randomeObstacles(trackSegments [tileIndexToMove % 4 + 2],obsCount);
 
 			//score display - cross 1 more tile get 10 more pts
 			score += 10;
@@ -64,8 +62,6 @@ public class PlayerMover : MonoBehaviour {
 				nextFire = Time.time + fireRate;
 				GameObject b = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
 				b.transform.parent = GameObject.Find ("Track").transform;
-	
-//				bullets.Add (b);
 			}
 			if (bulletsLeft == 0) {
 				bulletCountDownTimer -= Time.deltaTime;
@@ -81,7 +77,8 @@ public class PlayerMover : MonoBehaviour {
 	{
 		string collidedItem = other.gameObject.name;
 		//end game if obstacles are hit
-		if(collidedItem.Contains("FleshCube") || collidedItem.Contains("turret") || collidedItem.Contains("prism"))
+		if(!currentCharacter.gameObject.name.Contains ("Ghost") && 
+			(collidedItem.Contains("FleshCube") || collidedItem.Contains("turret") || collidedItem.Contains("prism")))
 		{
 			gameEnd = true;
 			//allow player to tumble and crash and shit
@@ -90,9 +87,8 @@ public class PlayerMover : MonoBehaviour {
 			this.GetComponent<Rigidbody> ().AddRelativeForce (collisionVector);
 			this.GetComponent<Rigidbody> ().AddTorque (collisionVector);
 			this.transform.Find ("Fire").gameObject.SetActive (true);
-//			Destroy (gameObject);
-//			GameObject.Find("Canvas").GetComponent<Canvas> ().enabled = true;
-			//TODO : show score board
+
+			//show score board
 			Social.localUser.Authenticate ((bool success) => {
 				if (success) {
 					Social.ReportScore (score, "CgkIsbPEkt4TEAIQAQ" ,(bool success1)=>{
@@ -121,38 +117,46 @@ public class PlayerMover : MonoBehaviour {
 		FlyingCar.SetActive (false);
 		FastShip.SetActive (false);
 		character.SetActive (true);
-	}
-
-	void randomeObstacles(GameObject segment, int count) {
-
-		//        foreach (Transform child in segment.transform) {
-		//            GameObject.Destroy(child.gameObject);
-		//        }
-
-		Vector3 randPos = Vector3.zero;
-		int myCheck = 0; //count overlap colliders
-		for(int i = 0; i < count; i++) {
-			GameObject obstacle = obstacles [Random.Range (0, 3)];
-			do {
-				myCheck = 0;
-				if (obstacle.gameObject.name == "turret_flesh") {
-					randPos = new Vector3(Random.Range(29.0f, 29.5f), Random.Range(0.0f, 200.0f), Random.Range(-45.0f,45.0f));
-				}else{
-					randPos = new Vector3(Random.Range(25.0f, 25.0f), Random.Range(0.0f, 200.0f), Random.Range(-45.0f,45.0f));}
-				Collider[] hitColliders = Physics.OverlapSphere(randPos, obsRadius);
-				for(int j = 0; j < hitColliders.Length; j++) {
-					if (hitColliders[j].tag == "mob") {
-						myCheck++;
-					}
-				}
-			} while (myCheck > 0);
-		
-			GameObject clone = Instantiate(obstacle,randPos, Quaternion.identity) as GameObject;  
-			clone.transform.parent = segment.transform;
-			clone.transform.localPosition = randPos;
+		currentCharacter = character;
+		if (character.gameObject.name.Contains ("Flying")) {
+			playerMovingSpeed = 0.45f;
+		} else {
+			playerMovingSpeed = 0.3f;
 		}
-	} 
+	}
+		
 
+	public void ObstacleGeneration(){
+		float generationRange = trackSegments[tileIndexToMove % 4].transform.position.z;
+		float gap = 30f;
+		for (int i = (tileIndexToMove % 4) * 15; i < (tileIndexToMove % 4 + 1) * 15; i++){
+			float offset =Random.Range (0f, 1f) >= 0.5 ? 0 : 180;
+			float deg = Random.Range (20, 160) + offset;
+			GameObject itemToPlace =  deg <= 180 ? ObstacleTypes [Random.Range (4, 8)] : ObstacleTypes [Random.Range (0,4)];
 
+			Debug.Log (itemToPlace.gameObject.name);
+			Debug.Log (offset);
+//			Debug.Log (deg);
 
+			float trackz = GameObject.Find("Track").transform.rotation.eulerAngles.z;
+			deg = (deg+trackz)%360;
+			float rad = deg * Mathf.Deg2Rad;
+			Vector3 placement = new Vector3 (Mathf.Cos(rad)*11, Mathf.Sin(rad)*11+12, Random.Range(generationRange, generationRange +30));
+			bool toPlace = true;
+			for (int j = (tileIndexToMove % 4) * 15; j < i; j++) {
+				if (ObsHolder [j] != null && Vector3.Distance (ObsHolder [j].transform.position, placement) <= gap) {
+					toPlace = false;
+					break;
+				}
+			}
+			if (toPlace) {
+				if (ObsHolder [i] == null) {
+					ObsHolder[i] = Instantiate (itemToPlace, placement, Quaternion.identity) as GameObject;
+					ObsHolder[i].transform.parent = trackSegments[tileIndexToMove % 4].transform;
+				} else {
+					ObsHolder [i].transform.position = placement;
+				}
+			}
+		}
+	}
 }
