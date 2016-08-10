@@ -42,8 +42,8 @@ public class ObstacleGenerator : MonoBehaviour {
             float deg = Random.Range(10, 170) + offset;
             GameObject itemToPlace = deg <= 180 ? ObstacleTypes[Random.Range(4, 8)] : ObstacleTypes[Random.Range(0, 4)];
 
-            Debug.Log(itemToPlace.gameObject.name);
-            Debug.Log(offset);
+//            Debug.Log(itemToPlace.gameObject.name);
+//            Debug.Log(offset);
             //Debug.Log (deg);
 
             float trackz = GameObject.Find("Track").transform.rotation.eulerAngles.z;
