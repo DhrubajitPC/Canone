@@ -11,14 +11,14 @@ public class TurretBulletMover : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		player = GameObject.Find ("Player");
-		metalTrack = GameObject.Find ("Track").GetComponent<TrackRotater> ().metalTrack;
 		pos = transform.position;
 	}
 
 	// Update is called once per frame
 	void Update () {
 		this.GetComponent<Rigidbody> ().velocity = ((player.transform.position - pos) / (player.transform.position - pos).magnitude) * speed;
-		if (pos.z - player.transform.position.z > 20) {
+
+		if (pos.z - player.transform.position.z > 40) {
 //			print (this.transform.position.z - player.transform.position.z > 15);
 			Destroy (gameObject);
 		}

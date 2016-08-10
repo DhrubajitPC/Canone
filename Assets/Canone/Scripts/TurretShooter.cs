@@ -17,13 +17,13 @@ public class TurretShooter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		metalTrack = GameObject.Find ("Track").GetComponent<TrackRotater> ().metalTrack;
-		print ("metalTrack:"+metalTrack);
-		if (gameObject.name == "turret" && metalTrack) {
-			print (1);
+		Vector3 dir = ((transform.position - player.transform.position) / (transform.position - player.transform.position).magnitude);
+		float angle = Vector3.Angle (player.transform.forward, dir);
+		if (gameObject.name == "turret" && angle < 30f) {
 			if (canShoot) {
 				GameObject b = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
 				b.transform.parent = GameObject.Find ("Track").transform;
+				b.transform.LookAt (player.transform);
 				canShoot = false;
 			}
 			bulletCountDownTimer -= Time.deltaTime;
