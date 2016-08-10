@@ -34,7 +34,7 @@ public class CameraMover : MonoBehaviour {
 
 	public void restartGame(){
 		GameObject.Find ("Player").GetComponent<PlayerMover> ().restart ();
-		GameObject.Find ("Track").GetComponent<PlayerMover> ().restart ();
+		GameObject.Find ("Track").GetComponent<TrackRotater> ().restart ();
 		SceneManager.LoadScene("TrackScene");
 	}
 }

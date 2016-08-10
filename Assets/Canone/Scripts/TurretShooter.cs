@@ -43,8 +43,9 @@ public class TurretShooter : MonoBehaviour {
 			GameObject b = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
 			b.transform.parent = GameObject.Find ("Track").transform;
 			b.transform.LookAt (player.transform);
-			gameObject.GetComponent<AudioSource> ().mute = false;
-
+			if (Random.Range (0, 1) > 0.97) {
+				gameObject.GetComponent<AudioSource> ().Play ();
+			}
 		}
 	
 	}
