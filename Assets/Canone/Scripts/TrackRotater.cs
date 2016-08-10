@@ -20,8 +20,6 @@ public class TrackRotater : MonoBehaviour {
 
 	private static float lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
 	private static Vector3 lowPassValue = Vector3.zero;
-	private static Vector3 acceleration;
-	private static Vector3 deltaAcceleration;
 
 
     //returns the relative rotation in terms of -180 and 180 from init
@@ -46,9 +44,9 @@ public class TrackRotater : MonoBehaviour {
 #if UNITY_EDITOR
 			bool rotate = Input.GetKeyDown ("space");
 #else
-			acceleration = Input.acceleration;
+			Vector3 acceleration = Input.acceleration;
 			lowPassValue = Vector3.Lerp(lowPassValue, acceleration, lowPassFilterFactor);
-			deltaAcceleration = acceleration - lowPassValue;
+			Vector3 deltaAcceleration = acceleration - lowPassValue;
 			bool rotate = deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold;
 #endif
 			if (rotate) {
@@ -69,7 +67,7 @@ public class TrackRotater : MonoBehaviour {
 #else
             float tilt = Input.acceleration.x;
 #endif
-			tilt = Mathf.Clamp (tilt, -maxRotateSpeed, maxRotateSpeed);
+			tilt = Mathf.Clamp (tilt, -maxRotateSpeed * PlayerMover.playerAgilityFactor, maxRotateSpeed * PlayerMover.playerAgilityFactor);
 			Quaternion currentRotation = transform.rotation;
 			Quaternion userRotation = Quaternion.Euler (0, 0, -tilt);
 			float rotation = relativeRotation ((currentRotation * userRotation).eulerAngles.z, initRot);

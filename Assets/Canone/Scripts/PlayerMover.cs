@@ -10,6 +10,7 @@ public class PlayerMover : MonoBehaviour {
 	private float playerMovingSpeed = 0.2f;
     public static float playerAccelerateFactor = 1.0f;
     public static float time_in_game = 0;
+    public static float playerAgilityFactor = 1.0f;
 
 	public static bool gameEnd = false;
     public static bool was_alive = true;
@@ -38,7 +39,6 @@ public class PlayerMover : MonoBehaviour {
 
 		SCORE = GameObject.Find ("Canvas").GetComponent<Text>();
 		score = 0;
-
 	}
 
     void Update()
@@ -129,14 +129,17 @@ public class PlayerMover : MonoBehaviour {
 		character.SetActive (true);
 		currentCharacter = character;
 		ghostBehaviour = null;
-		if (character.gameObject.name.Contains ("Flying")) {
-			playerMovingSpeed = 0.3f * playerAccelerateFactor;
-		} else {
-			playerMovingSpeed = 0.2f * playerAccelerateFactor;
-			if (character.gameObject.name.Contains ("Ghost")) {
-				ghostBehaviour = (GhostBehaviour)character.gameObject.GetComponent<GhostBehaviour> ();
-//				ghostBehaviour.timer = 10f;
-			}
-		}
-	}
+        if (character.gameObject.name.Contains("Ghost"))
+        {
+            ghostBehaviour = (GhostBehaviour)character.gameObject.GetComponent<GhostBehaviour>();
+            //ghostBehaviour.timer = 10f;
+        }
+        if (character.gameObject.name.Contains("FlyingCar"))
+        {
+            playerAgilityFactor = 1.5f;
+        } else
+        {
+            playerAgilityFactor = 1.0f;
+        }
+    }
 }
