@@ -84,6 +84,7 @@ public class PlayerMover : MonoBehaviour {
 				nextFire = Time.time + fireRate;
 				GameObject b = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
 				b.transform.parent = GameObject.Find ("Track").transform;
+				GameObject.Find ("FastShip").GetComponent<AudioSource> ().Play ();
 			}
 			if (bulletsLeft == 0) {
 				bulletCountDownTimer -= Time.deltaTime;
@@ -139,6 +140,7 @@ public class PlayerMover : MonoBehaviour {
 
 		// pick up powerups 
 		if (collidedItem.Contains ("Pickup")) {
+			transform.GetComponent<AudioSource> ().Play ();
 			Destroy (other.gameObject);
 			if (collidedItem.Contains ("Fast")) {
 				switchCharacter (FastShip);

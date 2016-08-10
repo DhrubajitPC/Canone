@@ -38,10 +38,12 @@ public class BulletMover : MonoBehaviour {
                     GameObject explosion = (GameObject)Instantiate(Resources.Load("prefabs/ExplosionFlesh"), placement, rotation);
                     Destroy(explosion, 1.0f);
                     ObstacleGenerator.ObsHolder[i] = Instantiate (rubbleTypes [0], placement, rotation) as GameObject;
+					GameObject.Find ("DestructionSoundManager").GetComponents<AudioSource> () [0].Play ();
 				} else if (collidedItem.Contains ("metal") || collidedItem.Contains ("MetalCube") || collidedItem.Contains ("turret_metal")) {
                     GameObject explosion = (GameObject)Instantiate(Resources.Load("prefabs/ExplosionMetal"), placement, rotation);
                     Destroy(explosion, 1.0f);
                     ObstacleGenerator.ObsHolder[i] = Instantiate (rubbleTypes [1], placement, rotation) as GameObject;
+					GameObject.Find ("DestructionSoundManager").GetComponents<AudioSource> () [1].Play ();
 				}
                 ObstacleGenerator.ObsHolder[i].transform.parent = ObjParent.transform;
                 if (collidedItem.Contains("Cube"))

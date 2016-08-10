@@ -32,16 +32,19 @@ public class TurretShooter : MonoBehaviour {
 				b.transform.parent = GameObject.Find ("Track").transform;
 //				b.transform.LookAt (player.transform);
 				canShoot = false;
+				gameObject.GetComponent<AudioSource> ().Play ();
 			}
 			bulletCountDownTimer -= Time.deltaTime;
 			if (bulletCountDownTimer < 0) {
 				canShoot = true;
 				bulletCountDownTimer = 0.25f;
 			}
-		} else if (gameObject.name == "turret_flesh(Clone)" && angle < 100 && dist < 25) {
+		} else if (gameObject.name == "turret_flesh(Clone)" && angle < 45 && dist < 25) {
 			GameObject b = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
 			b.transform.parent = GameObject.Find ("Track").transform;
 			b.transform.LookAt (player.transform);
+			gameObject.GetComponent<AudioSource> ().mute = false;
+
 		}
 	
 	}
