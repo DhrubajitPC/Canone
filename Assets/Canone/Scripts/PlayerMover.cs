@@ -139,7 +139,9 @@ public class PlayerMover : MonoBehaviour {
 					}
 				}
 			} while (myCheck > 0);
-			GameObject clone = Instantiate(obstacles[Random.Range(0,3)],randPos, Quaternion.identity) as GameObject;  
+			GameObject obstacle = obstacles [Random.Range (0, 3)];
+
+			GameObject clone = Instantiate(obstacle,randPos, Quaternion.identity) as GameObject;  
 			clone.transform.parent = segment.transform;
 			clone.transform.localPosition = randPos;
 		}
