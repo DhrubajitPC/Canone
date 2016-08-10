@@ -14,24 +14,22 @@ public class TurretBulletMover : MonoBehaviour {
 	void Start () {
 		player = GameObject.Find ("Player");
 		pos = transform.position;
+//		print (transform.name);
 	}
-//	BulletTurretFlesh(Clone);
-//	BulletTurret(Clone);
 	// Update is called once per frame
 	void Update () {
-//		print (gameObject.name);
 		distToPlayer = (player.transform.position - transform.position).magnitude;
-//		print (distToPlayer);
 		if (distToPlayer < 10) {
-//			gameObject.GetComponent<BoxCollider> ().enabled = true;
 		}
 		if (gameObject.name == "BulletTurret(Clone)") {
-			speed = 20;
+			speed = 30;
 			shootingRange = 30;
 		} else if (gameObject.name == "BulletTurretFlesh(Clone)") {
-			speed = 5;
-			shootingRange = 15;
+			speed = 25;
+			shootingRange = 20;
 		}
+//		print (player.transform.rotation.x);
+//		this.GetComponent<Rigidbody> ().velocity = transform.forward * speed;
 		this.GetComponent<Rigidbody> ().velocity = ((player.transform.position - pos) / (player.transform.position - pos).magnitude) * speed;
 		if (pos.z - transform.position.z > shootingRange) {
 			Destroy (gameObject);

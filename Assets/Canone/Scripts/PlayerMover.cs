@@ -17,6 +17,7 @@ public class PlayerMover : MonoBehaviour {
 	public GameObject bullet;
 	public GameObject FlyingCar;
 	public GameObject Ghost;
+	private GhostBehaviour ghostBehaviour = null;
 	public GameObject FastShip;
 	private GameObject currentCharacter;
 
@@ -37,11 +38,15 @@ public class PlayerMover : MonoBehaviour {
 
 		SCORE = GameObject.Find ("Canvas").GetComponent<Text>();
 		score = 0;
+
 	}
 
     void Update()
     {
         time_in_game += Time.deltaTime;
+		if (ghostBehaviour != null) {
+			ghostBehaviour.UpdateTimeLeft (Time.deltaTime);
+		}
         //playerAccelerateFactor += Mathf.Max(1.0f + (time_in_game / 600), 2.0f);
     }
 
@@ -49,6 +54,10 @@ public class PlayerMover : MonoBehaviour {
 		if (!gameEnd){
             score = (int)(time_in_game * 100);
             SCORE.text = "Score : " + score;
+
+			if (ghostBehaviour != null && Input.GetKeyDown ("s")) {
+				ghostBehaviour.TurnOnInvisibleMode ();
+			}
 
             transform.Translate (Vector3.forward * playerMovingSpeed);
 			if (Input.GetButton ("Fire1") && Time.time > nextFire && bulletsLeft > 0) {
@@ -91,11 +100,15 @@ public class PlayerMover : MonoBehaviour {
 	void OnCollisionEnter (Collision other)
 	{
 		string collidedItem = other.gameObject.name;
-		//end game if obstacles are hit
-		if(!currentCharacter.gameObject.name.Contains ("Ghost") && (other.gameObject.tag == "Obstacle"))
-		{
-			gameEnd = true;
-		}
+        //end game if obstacles are hit
+        if (other.gameObject.tag == "Obstacle")
+        {
+            gameEnd = true;
+            if (ghostBehaviour != null)
+            {
+                if (ghostBehaviour.on) { gameEnd = false; }
+            }
+        }
 
 		// pick up powerups 
 		if (collidedItem.Contains ("Pickup")) {
@@ -116,10 +129,15 @@ public class PlayerMover : MonoBehaviour {
 		FastShip.SetActive (false);
 		character.SetActive (true);
 		currentCharacter = character;
+		ghostBehaviour = null;
 		if (character.gameObject.name.Contains ("Flying")) {
 			playerMovingSpeed = 0.3f * playerAccelerateFactor;
 		} else {
 			playerMovingSpeed = 0.2f * playerAccelerateFactor;
+			if (character.gameObject.name.Contains ("Ghost")) {
+				ghostBehaviour = (GhostBehaviour)character.gameObject.GetComponent<GhostBehaviour> ();
+//				ghostBehaviour.timer = 10f;
+			}
 		}
 	}
 }

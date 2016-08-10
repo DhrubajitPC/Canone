@@ -90,47 +90,4 @@ public class ObstacleGenerator : MonoBehaviour {
             }
         }
     }
-
-    /*
-    public void ObstacleReposition()
-    {
-        float repositionRange = trackSegments[tileIndexToMove % 4].transform.position.z;
-        float gap = 30f;
-        for (int i = (tileIndexToMove % 4) * 15; i < ((tileIndexToMove % 4) + 1) * 15; i++)
-        {
-            float offset = Random.Range(0f, 1f) >= 0.5 ? 0 : 180;
-            float deg = Random.Range(10, 170) + offset;
-            GameObject itemToPlace = deg <= 180.0 ? ObstacleTypes[Random.Range(4, 8)] : ObstacleTypes[Random.Range(0, 4)];
-            if (deg)
-
-                Debug.Log(itemToPlace.gameObject.name);
-            Debug.Log(offset);
-            //Debug.Log (deg);
-
-            float trackz = GameObject.Find("Track").transform.rotation.eulerAngles.z;
-            deg = (deg + trackz) % 360;
-            float rad = deg * Mathf.Deg2Rad;
-            Vector3 placement = new Vector3(Mathf.Cos(rad) * 11, Mathf.Sin(rad) * 11 + 12, Random.Range(generationRange, generationRange + 30));
-            bool toPlace = true;
-            for (int j = (tileIndexToMove % 4) * 15; j < i; j++)
-            {
-                if (ObsHolder[j] != null && Vector3.Distance(ObsHolder[j].transform.position, placement) <= gap)
-                {
-                    toPlace = false;
-                    break;
-                }
-            }
-            if (toPlace)
-            {
-                if (ObsHolder[i] == null)
-                {
-                    ObsHolder[i] = Instantiate(itemToPlace, placement, Quaternion.identity) as GameObject;
-                    ObsHolder[i].transform.parent = trackSegments[tileIndexToMove % 4].transform;
-                }
-                else {
-                    ObsHolder[i].transform.position = placement;
-                }
-            }
-        }
-    }*/
 }
