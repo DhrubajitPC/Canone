@@ -4,12 +4,18 @@ using UnityEngine.UI;
 
 public class GhostBehaviour : MonoBehaviour {
 	public float timer;
+	private float cooling= 0f;
 	public bool on;
 	public GameObject TimeLeftDisplay;
+	private bool firstTime = true;
 
 	public void TurnOnInvisibleMode(){
-		on = true;
-		timer = 5f;
+		if (firstTime || cooling >= 10) {
+			if (firstTime) {firstTime = false;}
+			on = true;
+			timer = 3f;
+			cooling = 0f;
+		}
 	}
 	
 	// Update is called once per frame
@@ -19,11 +25,13 @@ public class GhostBehaviour : MonoBehaviour {
 				TimeLeftDisplay.GetComponent<Text> ().text = "";
 				TimeLeftDisplay.SetActive (false);
 				on = false;
-			} else {
+			}  else {
 				TimeLeftDisplay.SetActive (true);
 				timer -= deltaTime;
 				TimeLeftDisplay.GetComponent<Text>().text = "Time Left : "+timer;
 			}
+		}else {
+			if(!firstTime){cooling += deltaTime;}
 		}
 		return timer;
 	}

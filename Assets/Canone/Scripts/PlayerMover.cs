@@ -59,8 +59,8 @@ public class PlayerMover : MonoBehaviour {
 		}
 		playerAgilityFactor = 1.0f;
 		if (agilityBehaviour != null) {
-			float timer = agilityBehaviour.UpdateTimeLeft (Time.deltaTime);
-			if (timer > 0){playerAgilityFactor = 2f;}
+			agilityBehaviour.UpdateTimeLeft (Time.deltaTime);
+			if (agilityBehaviour.on){playerAgilityFactor = 5f;}
 		}
     }
 
