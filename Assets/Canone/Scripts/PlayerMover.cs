@@ -7,10 +7,12 @@ using GooglePlayGames;
 using UnityEngine.UI;
 
 public class PlayerMover : MonoBehaviour {
-	public GameObject[] trackSegments;
-	private float playerMovingSpeed = 0.1f;
-	private int tileIndexToMove = 0;
+	private float playerMovingSpeed = 0.2f;
+    private float playerAccelerateFactor = 1.0f;
+    private float time_in_game = 0;
+
 	public static bool gameEnd = false;
+    public static bool was_alive = true;
 
 	public GameObject bullet;
 	public GameObject FlyingCar;
@@ -28,10 +30,6 @@ public class PlayerMover : MonoBehaviour {
 	private int bulletsLeft = 3;
 	private float bulletCountDownTimer = 3;
 
-	public GameObject[] ObsHolder = new GameObject[60];
-	public GameObject[] ObstacleTypes = new GameObject[8];
-	private static readonly Random random = new Random();
-
 	void Start(){
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
 		gameEnd = false;
@@ -41,22 +39,18 @@ public class PlayerMover : MonoBehaviour {
 		score = 0;
 	}
 
+    void Update()
+    {
+        time_in_game += Time.deltaTime;
+        //playerAccelerateFactor += Mathf.Max(1.0f + (time_in_game / 600), 2.0f);
+    }
+
 	void FixedUpdate () {
-		// endless track
-		if (this.transform.position.z > 30 * (tileIndexToMove + 1) + 10) {
-			trackSegments [tileIndexToMove % 4].transform.Translate (0, 30*4, 0);
-
-			//obstacles generation
-			ObstacleGeneration ();
-
-			tileIndexToMove += 1;
-
-			//score display - cross 1 more tile get 10 more pts
-			score += 10;
-			SCORE.text = "Score : "+ score;
-		}
 		if (!gameEnd){
-			transform.Translate (Vector3.forward * playerMovingSpeed);
+            score = (int)(time_in_game * 100);
+            SCORE.text = "Score : " + score;
+
+            transform.Translate (Vector3.forward * playerMovingSpeed);
 			if (Input.GetButton ("Fire1") && Time.time > nextFire && bulletsLeft > 0) {
 				bulletsLeft -= 1;
 				nextFire = Time.time + fireRate;
@@ -70,7 +64,28 @@ public class PlayerMover : MonoBehaviour {
 				bulletsLeft = 3;
 				bulletCountDownTimer = 3;
 			}
-		}	
+		}
+        if (gameEnd && was_alive)
+        {
+            //dead script
+            was_alive = false;
+            //allow player to tumble and crash and shit
+            this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+            Vector3 collisionVector = new Vector3(Random.Range(-100, 100), Random.Range(200, 500), -200);
+            this.GetComponent<Rigidbody>().AddRelativeForce(collisionVector);
+            this.GetComponent<Rigidbody>().AddTorque(collisionVector);
+            this.transform.Find("Fire").gameObject.SetActive(true);
+
+            //show score board
+            Social.localUser.Authenticate((bool success) => {
+                if (success)
+                {
+                    Social.ReportScore(score, "CgkIsbPEkt4TEAIQAQ", (bool success1) => {
+                        Social.ShowLeaderboardUI();
+                    });
+                }
+            });
+        }
 	}
 
 	void OnCollisionEnter (Collision other)
@@ -81,22 +96,6 @@ public class PlayerMover : MonoBehaviour {
 			(collidedItem.Contains("FleshCube") || collidedItem.Contains("turret") || collidedItem.Contains("prism")))
 		{
 			gameEnd = true;
-			//allow player to tumble and crash and shit
-			this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-			Vector3 collisionVector = new Vector3 (Random.Range (-100, 100), Random.Range (200, 500), -200);
-			this.GetComponent<Rigidbody> ().AddRelativeForce (collisionVector);
-			this.GetComponent<Rigidbody> ().AddTorque (collisionVector);
-			this.transform.Find ("Fire").gameObject.SetActive (true);
-
-			//show score board
-			Social.localUser.Authenticate ((bool success) => {
-				if (success) {
-					Social.ReportScore (score, "CgkIsbPEkt4TEAIQAQ" ,(bool success1)=>{
-						Social.ShowLeaderboardUI();
-					});
-				}
-			});
-
 		}
 
 		// pick up powerups 
@@ -119,44 +118,9 @@ public class PlayerMover : MonoBehaviour {
 		character.SetActive (true);
 		currentCharacter = character;
 		if (character.gameObject.name.Contains ("Flying")) {
-			playerMovingSpeed = 0.45f;
+			playerMovingSpeed = 0.3f * playerAccelerateFactor;
 		} else {
-			playerMovingSpeed = 0.3f;
-		}
-	}
-		
-
-	public void ObstacleGeneration(){
-		float generationRange = trackSegments[tileIndexToMove % 4].transform.position.z;
-		float gap = 30f;
-		for (int i = (tileIndexToMove % 4) * 15; i < (tileIndexToMove % 4 + 1) * 15; i++){
-			float offset =Random.Range (0f, 1f) >= 0.5 ? 0 : 180;
-			float deg = Random.Range (20, 160) + offset;
-			GameObject itemToPlace =  deg <= 180 ? ObstacleTypes [Random.Range (4, 8)] : ObstacleTypes [Random.Range (0,4)];
-
-			Debug.Log (itemToPlace.gameObject.name);
-			Debug.Log (offset);
-//			Debug.Log (deg);
-
-			float trackz = GameObject.Find("Track").transform.rotation.eulerAngles.z;
-			deg = (deg+trackz)%360;
-			float rad = deg * Mathf.Deg2Rad;
-			Vector3 placement = new Vector3 (Mathf.Cos(rad)*11, Mathf.Sin(rad)*11+12, Random.Range(generationRange, generationRange +30));
-			bool toPlace = true;
-			for (int j = (tileIndexToMove % 4) * 15; j < i; j++) {
-				if (ObsHolder [j] != null && Vector3.Distance (ObsHolder [j].transform.position, placement) <= gap) {
-					toPlace = false;
-					break;
-				}
-			}
-			if (toPlace) {
-				if (ObsHolder [i] == null) {
-					ObsHolder[i] = Instantiate (itemToPlace, placement, Quaternion.identity) as GameObject;
-					ObsHolder[i].transform.parent = trackSegments[tileIndexToMove % 4].transform;
-				} else {
-					ObsHolder [i].transform.position = placement;
-				}
-			}
+			playerMovingSpeed = 0.2f * playerAccelerateFactor;
 		}
 	}
 }
