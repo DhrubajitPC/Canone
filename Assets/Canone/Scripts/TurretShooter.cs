@@ -19,7 +19,9 @@ public class TurretShooter : MonoBehaviour {
 	void Update () {
 		Vector3 dir = ((transform.position - player.transform.position) / (transform.position - player.transform.position).magnitude);
 		float angle = Vector3.Angle (player.transform.forward, dir);
-		if (gameObject.name == "turret" && angle < 30f) {
+		print (angle);
+//		gameObject.name == "turret" || gameObject.name == "turret_flesh" && 
+		if (angle < 30f) {
 			if (canShoot) {
 				GameObject b = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
 				b.transform.parent = GameObject.Find ("Track").transform;

@@ -12,6 +12,8 @@ public class TurretBulletMover : MonoBehaviour {
 	void Start () {
 		player = GameObject.Find ("Player");
 		pos = transform.position;
+		print (transform.rotation);
+		print (transform.position);
 	}
 
 	// Update is called once per frame
@@ -19,7 +21,6 @@ public class TurretBulletMover : MonoBehaviour {
 		this.GetComponent<Rigidbody> ().velocity = ((player.transform.position - pos) / (player.transform.position - pos).magnitude) * speed;
 
 		if (pos.z - player.transform.position.z > 40) {
-//			print (this.transform.position.z - player.transform.position.z > 15);
 			Destroy (gameObject);
 		}
 	}
