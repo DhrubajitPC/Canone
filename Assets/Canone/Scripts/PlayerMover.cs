@@ -59,6 +59,7 @@ public class PlayerMover : MonoBehaviour {
 			}
 
             transform.Translate (Vector3.forward * playerMovingSpeed);
+			if(currentCharacter.gameObject.name.Contains("Fast")){
 			if (Input.GetButton ("Fire1") && Time.time > nextFire && bulletsLeft > 0) {
 				bulletsLeft -= 1;
 				nextFire = Time.time + fireRate;
@@ -71,6 +72,7 @@ public class PlayerMover : MonoBehaviour {
 			if (bulletCountDownTimer < 0) {
 				bulletsLeft = 3;
 				bulletCountDownTimer = 3;
+				}
 			}
 		}
         if (gameEnd && was_alive)
