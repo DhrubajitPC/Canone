@@ -44,12 +44,14 @@ public class ObstacleGenerator : MonoBehaviour {
         //for (int i = (tileIndexToMove % 4) * 15; i < ((tileIndexToMove % 4) + 1) * 15; i++)
         for (int i = (tileIndexToMove % 4) * 15; i < ((tileIndexToMove % 4) * 15)+difficulty; i++)
         {
-            bool toPlace = true;
-            GameObject itemToPlace;
-            while (toPlace)
+            bool toPlace = false;
+            GameObject itemToPlace = null;
+            float deg = 0.0f;
+            Vector3 placement = Vector3.zero;
+            while (!toPlace)
             {
                 float offset = Random.Range(0f, 1f) >= 0.5 ? 0 : 180;
-                float deg = Random.Range(10, 170) + offset;
+                deg = Random.Range(10, 170) + offset;
                 itemToPlace = ObstacleTypes[Random.Range(0, 4)];
                 if (deg < 180.0f)
                 {
@@ -62,8 +64,9 @@ public class ObstacleGenerator : MonoBehaviour {
                 float trackz = GameObject.Find("Track").transform.rotation.eulerAngles.z;
                 deg = (trackz + deg) % 360; //make degree follow trackz
                 float rad = deg * Mathf.Deg2Rad;
-                Vector3 placement = new Vector3(Mathf.Cos(rad) * 12, (Mathf.Sin(rad) * 12) + 12, Random.Range(generationRange, generationRange + 30f));
+                placement = new Vector3(Mathf.Cos(rad) * 12, (Mathf.Sin(rad) * 12) + 12, Random.Range(generationRange, generationRange + 30f));
 
+                toPlace = true;
                 //check if this overlaps with other objects
                 for (int j = (tileIndexToMove % 4) * 15; j < i; j++)
                 {
