@@ -5,7 +5,7 @@ public class ObstacleGenerator : MonoBehaviour {
 
     public GameObject[] trackSegments;
     private int tileIndexToMove = 0;
-    private GameObject[] ObsHolder = new GameObject[60];
+    public static GameObject[] ObsHolder = new GameObject[60];
     private int difficulty = 1; //1 to 15
     public GameObject[] ObstacleTypes = new GameObject[8];
 
