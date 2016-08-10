@@ -26,7 +26,7 @@ public class TurretShooter : MonoBehaviour {
 			transform.LookAt (player.transform);
 		}
 		print (gameObject.name);
-		if (gameObject.name == "turret(Clone)" && angle < 30f && dist < 30) {
+		if (gameObject.name == "turret_metal(Clone)" && angle < 30f && dist < 30) {
 			if (canShoot) {
 				GameObject b = Instantiate (bullet, bulletSpawn.position, transform.rotation) as GameObject;
 				b.transform.parent = GameObject.Find ("Track").transform;

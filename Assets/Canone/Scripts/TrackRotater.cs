@@ -21,6 +21,7 @@ public class TrackRotater : MonoBehaviour {
 	private static float lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
 	private static Vector3 lowPassValue = Vector3.zero;
 
+	private float lastRotate = 0.0f;
 
     //returns the relative rotation in terms of -180 and 180 from init
     float relativeRotation(float rot, float init)
@@ -40,6 +41,7 @@ public class TrackRotater : MonoBehaviour {
 	}
 
 	void Update(){
+		lastRotate += Time.deltaTime;
 		if (!PlayerMover.gameEnd) {
 #if UNITY_EDITOR
 			bool rotate = Input.GetKeyDown ("space");
@@ -49,7 +51,8 @@ public class TrackRotater : MonoBehaviour {
 			Vector3 deltaAcceleration = acceleration - lowPassValue;
 			bool rotate = deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold;
 #endif
-			if (rotate) {
+			if (rotate && lastRotate >= 0.5f) {
+				lastRotate = 0.0f;
 				initRot = initRot == 0 ? 180f : 0f;
 				player.transform.position = new Vector3 (player.transform.position.x, 
 					1.6f, 
