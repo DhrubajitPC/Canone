@@ -17,11 +17,12 @@ public class TurretShooter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Vector3 dir = ((transform.position - player.transform.position) / (transform.position - player.transform.position).magnitude);
+		float dist = (transform.position - player.transform.position).magnitude;
+		Vector3 dir = ((transform.position - player.transform.position) / dist);
 		float angle = Vector3.Angle (player.transform.forward, dir);
-		print (angle);
+//		print (angle);
 //		gameObject.name == "turret" || gameObject.name == "turret_flesh" && 
-		if (angle < 30f) {
+		if (gameObject.name == "turret" && angle < 30f && dist < 30) {
 			if (canShoot) {
 				GameObject b = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
 				b.transform.parent = GameObject.Find ("Track").transform;
@@ -33,6 +34,10 @@ public class TurretShooter : MonoBehaviour {
 				canShoot = true;
 				bulletCountDownTimer = 1;
 			}
+		} else if (gameObject.name == "turret_flesh" && angle < 135 && dist < 15) {
+			GameObject b = Instantiate (bullet, bulletSpawn.position, bulletSpawn.rotation) as GameObject;
+			b.transform.parent = GameObject.Find ("Track").transform;
+			b.transform.LookAt (player.transform);
 		}
 	
 	}
