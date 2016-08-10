@@ -22,7 +22,7 @@ public class ObstacleGenerator : MonoBehaviour {
     void FixedUpdate()
     {
         // endless track
-        if (this.transform.position.z > 30 * (tileIndexToMove + 1) + 10)
+        if (this.transform.position.z > 30 * (tileIndexToMove + 1) + 30)
         {
             trackSegments[tileIndexToMove % 4].transform.Translate(0, 30 * 4, 0);
 
@@ -50,13 +50,25 @@ public class ObstacleGenerator : MonoBehaviour {
             Vector3 placement = Vector3.zero;
             while (!toPlace)
             {
-                float offset = Random.Range(0f, 1f) >= 0.5 ? 0 : 180;
+                float offset = Random.Range(0f, 1f) >= 0.65 ? 0 : 180;
                 deg = Random.Range(10, 170) + offset;
                 itemToPlace = ObstacleTypes[Random.Range(0, 4)];
                 if (deg < 180.0f)
                 {
                     itemToPlace = ObstacleTypes[Random.Range(4, 8)];
                 }
+
+				//lucky, generate powerup
+				if (i % 5 == 0) {
+					int rand = Random.Range (0, 10);
+					if (rand == 1) {
+						itemToPlace = (GameObject) Resources.Load ("prefabs/PickupGhost");
+					} else if (rand == 2) {
+						itemToPlace = (GameObject) Resources.Load ("prefabs/PickupFlyingCar");
+					} else if (rand == 3) {
+						itemToPlace = (GameObject) Resources.Load ("prefabs/PickupFastShip");
+					}
+				}
 
                 //Debug.Log(itemToPlace.gameObject.name);
                 //Debug.Log(offset);

@@ -70,13 +70,13 @@ public class TrackRotater : MonoBehaviour {
 #else
             float tilt = Input.acceleration.x;
 #endif
-			tilt = Mathf.Clamp (tilt, -maxRotateSpeed * PlayerMover.playerAgilityFactor, maxRotateSpeed * PlayerMover.playerAgilityFactor);
+			tilt = Mathf.Clamp (tilt, -maxRotateSpeed, maxRotateSpeed);
 			Quaternion currentRotation = transform.rotation;
 			Quaternion userRotation = Quaternion.Euler (0, 0, -tilt);
 			float rotation = relativeRotation ((currentRotation * userRotation).eulerAngles.z, initRot);
 			if (Mathf.Abs (tilt) > minRotateSpeed && Mathf.Abs (rotation) <= maxRot) 
 			{
-				transform.Rotate (-tilt * Vector3.forward);
+				transform.Rotate (-tilt * Vector3.forward * PlayerMover.playerAgilityFactor);
 			}
 
 			float z_rot = relativeRotation (currentRotation.eulerAngles.z, initRot);

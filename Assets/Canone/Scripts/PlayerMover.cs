@@ -60,14 +60,14 @@ public class PlayerMover : MonoBehaviour {
 		playerAgilityFactor = 1.0f;
 		if (agilityBehaviour != null) {
 			agilityBehaviour.UpdateTimeLeft (Time.deltaTime);
-			if (agilityBehaviour.on){playerAgilityFactor = 5f;}
+			if (agilityBehaviour.on){playerAgilityFactor = 2f;}
 		}
     }
 
 	void FixedUpdate () {
 		if (!gameEnd){
             score = (int)(time_in_game * 100);
-            SCORE.text = "Score : " + score;
+            SCORE.text = ""+score;
 
 			if (ghostBehaviour != null && Input.GetButton ("Fire1")) {
 				ghostBehaviour.TurnOnInvisibleMode ();
@@ -161,7 +161,6 @@ public class PlayerMover : MonoBehaviour {
         if (character.gameObject.name.Contains("Ghost"))
         {
             ghostBehaviour = (GhostBehaviour)character.gameObject.GetComponent<GhostBehaviour>();
-            //ghostBehaviour.timer = 10f;
         }
 
         if (character.gameObject.name.Contains("FlyingCar"))
