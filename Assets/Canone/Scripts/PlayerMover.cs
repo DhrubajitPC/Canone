@@ -92,8 +92,7 @@ public class PlayerMover : MonoBehaviour {
 	{
 		string collidedItem = other.gameObject.name;
 		//end game if obstacles are hit
-		if(!currentCharacter.gameObject.name.Contains ("Ghost") && 
-			(collidedItem.Contains("FleshCube") || collidedItem.Contains("turret") || collidedItem.Contains("prism")))
+		if(!currentCharacter.gameObject.name.Contains ("Ghost") && (other.gameObject.tag == "Obstacle"))
 		{
 			gameEnd = true;
 		}
