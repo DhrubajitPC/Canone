@@ -48,9 +48,12 @@ public class PlayerMover : MonoBehaviour {
 		if (this.transform.position.z > 30 * (tileIndexToMove + 1) + 10) {
 			trackSegments [tileIndexToMove % 4].transform.Translate (0, 30*4, 0);
 			tileIndexToMove += 1;
+			if (tileIndexToMove % 4 == 0) {
+				obsCount++;
+			}
+			randomeObstacles(trackSegments [tileIndexToMove % 4 + 2],obsCount);
+
 			//score display - cross 1 more tile get 10 more pts
-			obsCount ++ ;
-			randomeObstacles(trackSegments [(tileIndexToMove+1) % 4],obsCount);
 			score += 10;
 			SCORE.text = "Score : "+ score;
 		}
@@ -133,9 +136,9 @@ public class PlayerMover : MonoBehaviour {
 			do {
 				myCheck = 0;
 				if (obstacle.gameObject.name == "turret_flesh") {
-					randPos = new Vector3(Random.Range(29.0f, 29.5f), Random.Range(0.0f, 200.0f), Random.Range(-25.0f,25.0f));
+					randPos = new Vector3(Random.Range(29.0f, 29.5f), Random.Range(0.0f, 200.0f), Random.Range(-45.0f,45.0f));
 				}else{
-					randPos = new Vector3(Random.Range(25.0f, 25.0f), Random.Range(0.0f, 200.0f), Random.Range(-25.0f,25.0f));}
+					randPos = new Vector3(Random.Range(25.0f, 25.0f), Random.Range(0.0f, 200.0f), Random.Range(-45.0f,45.0f));}
 				Collider[] hitColliders = Physics.OverlapSphere(randPos, obsRadius);
 				for(int j = 0; j < hitColliders.Length; j++) {
 					if (hitColliders[j].tag == "mob") {
@@ -143,7 +146,6 @@ public class PlayerMover : MonoBehaviour {
 					}
 				}
 			} while (myCheck > 0);
-
 		
 			GameObject clone = Instantiate(obstacle,randPos, Quaternion.identity) as GameObject;  
 			clone.transform.parent = segment.transform;
