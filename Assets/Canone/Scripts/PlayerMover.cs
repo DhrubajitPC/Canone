@@ -22,6 +22,8 @@ public class PlayerMover : MonoBehaviour {
 	public GameObject FastShip;
 	private GameObject currentCharacter;
 
+	public GameObject RestartButton;
+
 	public Transform bulletSpawn;
 	public float fireRate;
 	public UnityEngine.UI.Text SCORE;
@@ -36,6 +38,7 @@ public class PlayerMover : MonoBehaviour {
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
 		gameEnd = false;
 		switchCharacter (FastShip);
+		RestartButton.SetActive (false);
 
 		SCORE = GameObject.Find ("Canvas").GetComponent<Text>();
 		score = 0;
@@ -59,6 +62,7 @@ public class PlayerMover : MonoBehaviour {
 			}
 
             transform.Translate (Vector3.forward * playerMovingSpeed);
+			if(currentCharacter.gameObject.name.Contains("Fast")){
 			if (Input.GetButton ("Fire1") && Time.time > nextFire && bulletsLeft > 0) {
 				bulletsLeft -= 1;
 				nextFire = Time.time + fireRate;
@@ -71,6 +75,7 @@ public class PlayerMover : MonoBehaviour {
 			if (bulletCountDownTimer < 0) {
 				bulletsLeft = 3;
 				bulletCountDownTimer = 3;
+				}
 			}
 		}
         if (gameEnd && was_alive)
@@ -93,6 +98,7 @@ public class PlayerMover : MonoBehaviour {
                     });
                 }
             });
+			RestartButton.SetActive (true);
         }
 	}
 
