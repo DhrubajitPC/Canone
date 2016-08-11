@@ -118,7 +118,7 @@ public class PlayerMover : MonoBehaviour {
 			if (success)
 			{
 				Social.ReportScore(score, "CgkIsbPEkt4TEAIQAQ", (bool success1) => {
-					Social.ShowLeaderboardUI();
+					PlayGamesPlatform.Instance.ShowLeaderboardUI("CgkIsbPEkt4TEAIQAQ");
 				});
 			}
 		});
