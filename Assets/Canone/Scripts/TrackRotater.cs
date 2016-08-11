@@ -16,7 +16,7 @@ public class TrackRotater : MonoBehaviour {
 	// The greater the value of LowPassKernelWidthInSeconds, the slower the filtered value will converge towards current input sample (and vice versa).
 	private static float lowPassKernelWidthInSeconds = 1.0f;
 	// This next parameter is initialized to 2.0 per Apple's recommendation, or at least according to Brady! ;)
-	private static float shakeDetectionThreshold = 2.0f;
+	private static float shakeDetectionThreshold = 4.0f;
 
 	private static float lowPassFilterFactor = accelerometerUpdateInterval / lowPassKernelWidthInSeconds;
 	private static Vector3 lowPassValue = Vector3.zero;
@@ -24,9 +24,6 @@ public class TrackRotater : MonoBehaviour {
 	private float lastRotate = 0.0f;
 
 	public void restart(){
-		player = GameObject.Find ("Player");
-		shakeDetectionThreshold *= shakeDetectionThreshold;
-		lowPassValue = Input.acceleration;
 		lastRotate = 0.0f;
 	}
 
@@ -42,6 +39,9 @@ public class TrackRotater : MonoBehaviour {
     }
 
 	void Start(){
+		player = GameObject.Find ("Player");
+		//shakeDetectionThreshold *= shakeDetectionThreshold;
+		lowPassValue = Input.acceleration;
 		restart ();
 	}
 
@@ -73,7 +73,7 @@ public class TrackRotater : MonoBehaviour {
 #if UNITY_EDITOR
             float tilt = Input.GetAxis("Horizontal");
 #else
-            float tilt = Input.acceleration.x;
+            float tilt = Input.acceleration.x * 1.5f;
 #endif
 			tilt = Mathf.Clamp (tilt, -maxRotateSpeed, maxRotateSpeed);
 			Quaternion currentRotation = transform.rotation;
