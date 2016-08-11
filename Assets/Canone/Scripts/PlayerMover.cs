@@ -166,6 +166,10 @@ public class PlayerMover : MonoBehaviour {
 	}
 
 	void switchCharacter(GameObject character){
+		GameObject effect = (GameObject)Instantiate(Resources.Load("prefabs/PowerupGain"), transform.position, Quaternion.identity);
+		effect.transform.SetParent (transform);
+		Destroy(effect, 1.98f);
+
 		Ghost.SetActive (false);
 		FlyingCar.SetActive (false);
 		FastShip.SetActive (false);
